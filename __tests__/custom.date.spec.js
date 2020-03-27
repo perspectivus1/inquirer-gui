@@ -27,7 +27,7 @@ describe('Question of custom type date', () => {
     });
     wrapper.vm.registerPlugin(datePlugin);
     await Vue.nextTick();
-    wrapper.setProps({ questions: questionDate });
+    wrapper.vm.setQuestions(questionDate);
     await Vue.nextTick();
     
     expect(wrapper.find('p.question-label').element.innerHTML).toBe("birthday");

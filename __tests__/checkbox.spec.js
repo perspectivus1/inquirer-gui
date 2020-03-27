@@ -87,7 +87,7 @@ const questionCheckboxCheckedForceDefault = [
 describe('Question of type checkbox', () => {
   test('Checkbox', async () => {
     const wrapper = mount(Form, {});
-    wrapper.setProps({ questions: questionCheckbox });
+    wrapper.vm.setQuestions(questionCheckbox);
     await Vue.nextTick();
 
     const citizenship = wrapper.find('div[role="listitem"]');
@@ -104,7 +104,7 @@ describe('Question of type checkbox', () => {
 
   test('Checkbox with choices as function', async () => {
     const wrapper = mount(Form, {});
-    wrapper.setProps({ questions: questionCheckboxChoicesAsFunction });
+    wrapper.vm.setQuestions(questionCheckboxChoicesAsFunction);
     await Vue.nextTick();
 
     const citizenship = wrapper.find('div[role="listitem"]');
@@ -120,7 +120,7 @@ describe('Question of type checkbox', () => {
 
   test('Checkbox with choices as function that return dynamic values', async () => {
     const wrapper = mount(Form, {});
-    wrapper.setProps({ questions: questionCheckboxDynamicChoicesAsFunction });
+    wrapper.vm.setQuestions(questionCheckboxDynamicChoicesAsFunction);
     await Vue.nextTick();
 
     const name = wrapper.find('input');
@@ -132,26 +132,26 @@ describe('Question of type checkbox', () => {
     await utils.sleep(300);
 
     await Vue.nextTick();
-    expect(wrapper.props("questions")[1]._choices[2].value).toBe(country);
+    expect(wrapper.vm.questions[1]._choices[2].value).toBe(country);
   });
 
   test('Checkbox with checked choice', async () => {
     const wrapper = mount(Form, {});
-    wrapper.setProps({ questions: questionCheckboxChecked });
+    wrapper.vm.setQuestions(questionCheckboxChecked);
     await Vue.nextTick();
     await Vue.nextTick();
 
-    expect(wrapper.props("questions")[0].answer[1]).toBe("China");
-    expect(wrapper.props("questions")[0].answer).toHaveLength(2);
+    expect(wrapper.vm.questions[0].answer[1]).toBe("China");
+    expect(wrapper.vm.questions[0].answer).toHaveLength(2);
   });
 
   test('Checkbox with checked choice, but force default', async () => {
     const wrapper = mount(Form, {});
-    wrapper.setProps({ questions: questionCheckboxCheckedForceDefault });
+    wrapper.vm.setQuestions(questionCheckboxCheckedForceDefault);
     await Vue.nextTick();
     await Vue.nextTick();
 
-    expect(wrapper.props("questions")[0].answer[0]).toBe("Germany");
-    expect(wrapper.props("questions")[0].answer).toHaveLength(1);
+    expect(wrapper.vm.questions[0].answer[0]).toBe("Germany");
+    expect(wrapper.vm.questions[0].answer).toHaveLength(1);
   });
 });

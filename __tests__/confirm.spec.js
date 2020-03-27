@@ -14,7 +14,7 @@ const questionConfirm = [
 describe('Question of type confirm', () => {
   test('Confirm', async () => {
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionConfirm });
+    wrapper.vm.setQuestions(questionConfirm);
     await Vue.nextTick();
 
     const confirm = wrapper.find('label');

@@ -1,6 +1,6 @@
 # File Browser Plugin for Inquirer-gui
 
-This inquirer-gui plugin enables selecting a file from a backend.
+This inquirer-gui plugin enables selecting a folder from a backend.
 
 It can be used in Visual Studio Code when working locally or in [remote development](https://code.visualstudio.com/docs/remote/remote-overview) or in [Theia](https://github.com/eclipse-theia/theia).
 

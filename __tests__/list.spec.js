@@ -58,11 +58,11 @@ describe('Question of type list', () => {
 
     document.body.setAttribute('data-app', 'true');
     const wrapper = mount(Form, { vuetify, attachToDocument: true });
-    wrapper.setProps({ questions: questionList });
+    wrapper.vm.setQuestions(questionList);
 
     await Vue.nextTick();
 
-    expect(wrapper.vm.$props.questions[0].answer).toBe(questionList[0].default);
+    expect(wrapper.vm.questions[0].answer).toBe(questionList[0].default);
   });
 
   test('List without default', async () => {
@@ -72,7 +72,7 @@ describe('Question of type list', () => {
 
     document.body.setAttribute('data-app', 'true');
     const wrapper = mount(Form, { vuetify, attachToDocument: true });
-    wrapper.setProps({ questions: questionListNoDefault });
+    wrapper.vm.setQuestions(questionListNoDefault);
 
     await Vue.nextTick();
     await Vue.nextTick();
@@ -91,7 +91,7 @@ describe('Question of type list', () => {
 
     document.body.setAttribute('data-app', 'true');
     const wrapper = mount(Form, { vuetify, attachToDocument: true });
-    wrapper.setProps({ questions: questionListInvalidChoices });
+    wrapper.vm.setQuestions(questionListInvalidChoices);
 
     await Vue.nextTick();
     await Vue.nextTick();
@@ -110,7 +110,7 @@ describe('Question of type list', () => {
 
     document.body.setAttribute('data-app', 'true');
     const wrapper = mount(Form, { vuetify, attachToDocument: true });
-    wrapper.setProps({ questions: questionListDefaultAsIndex });
+    wrapper.vm.setQuestions(questionListDefaultAsIndex);
 
     await Vue.nextTick();
     await Vue.nextTick();
@@ -129,7 +129,7 @@ describe('Question of type list', () => {
 
     document.body.setAttribute('data-app', 'true');
     const wrapper = mount(Form, { vuetify, attachToDocument: true });
-    wrapper.setProps({ questions: questionListEmptyChoices });
+    wrapper.vm.setQuestions(questionListEmptyChoices);
 
     await Vue.nextTick();
     await Vue.nextTick();

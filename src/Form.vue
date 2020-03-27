@@ -1,27 +1,48 @@
 <template>
-  <v-form class="inquirer-gui">
-    <template v-for="(question, index) in questions">
-      <p
-        :key="'label-' + index"
-        class="question-label"
-        v-if="question.shouldShow"
-      >{{question._message}}</p>
-      <component
-        v-if="question.shouldShow"
-        :is="getComponentByQuestionType(question.guiType ? question.guiType: question.type)"
-        :key="index"
-        :question="question"
-        @answerChanged="onAnswerChanged"
-        @customEvent="onCustomEvent"
-      ></component>
-      <div
-        v-if="question.shouldShow && !question.isValid" 
-        class="error-validation-text"
-        :key="'validation-' + index"
-      ><span class="error-validation-asterisk">*</span> {{question.validationMessage}}</div>
-
-    </template>
-  </v-form>
+  <div id="inquirerDialogBackground" :class="displayStyleName">
+    <div id="inquirerDialog" :class="displayStyleName">
+    <div id="submitMessage" v-if="displayStyle==='submit'">{{ submitMessage }}</div>
+    <v-form
+      class="inquirer-gui"
+      :class="{ 'form-style-submit': displayStyle === 'submit' }"
+    >
+      <template v-for="(question, index) in questions">
+        <p
+          :key="'label-' + index"
+          class="question-label"
+          v-if="question.shouldShow"
+        >{{question._message}}</p>
+        <component
+          v-if="question.shouldShow"
+          :is="getComponentByQuestionType(question.guiType ? question.guiType: question.type)"
+          :key="index"
+          :question="question"
+          @answerChanged="onAnswerChanged"
+          @customEvent="onCustomEvent"
+        ></component>
+        <div
+          v-if="question.shouldShow && !question.isValid"
+          class="error-validation-text"
+          :key="'validation-' + index"
+        >
+          <span class="error-validation-asterisk">*</span>
+          {{question.validationMessage}}
+        </div>
+      </template>
+    </v-form>
+    <div class="text-center" v-if="displayStyle==='submit'">
+      <v-btn id="cancel" key="cancel" class="ma-2" outlined @click="onCancel">Cancel</v-btn>
+      <v-btn
+        id="submit"
+        key="submit"
+        class="ma-2"
+        outlined
+        @click="onSubmit"
+        :disabled="someInvalid"
+      >{{ submitButtonText }}</v-btn>
+    </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -30,18 +51,34 @@ import Plugins from "./Plugins";
 const NOT_ANSWERED = "Not answered";
 export default {
   name: "Form",
-  props: {
-    questions: Array
-  },
   data() {
     return {
-      plugins: null
+      plugins: null,
+      questions: [],
+      isTrue: true,
+      displayStyle: "default",
+      displayStyleName: "display-style-default",
+      submitButtonText: "Submit",
+      submitMessage: "Submit",
+      someInvalid: false
     };
   },
   computed: {
     console: () => console
   },
   methods: {
+    setQuestions(questions, options) {
+      if (options && options.style === "submit") {
+        this.displayStyle = options.style;
+        this.displayStyleName = "display-style-submit";
+        this.submitButtonText = options.submitButtonText;
+        this.submitMessage = options.submitMessage;
+      } else {
+        this.displayStyle = "default";
+        this.displayStyleName = "display-style-default";
+      }
+      this.questions = questions;
+    },
     removeShouldntShows(questions, answers) {
       for (let question of this.questions) {
         // remove answers to questions whose when() evaluated to false
@@ -64,11 +101,15 @@ export default {
               this.setValid(question);
             }
           } else {
-            this.setInvalid(question,
-              typeof response === "string" ? response : "");
+            this.setInvalid(
+              question,
+              typeof response === "string" ? response : ""
+            );
           }
-        } catch(e) {
-          this.console.error(`Could not evaluate validate() for ${question.name}`);
+        } catch (e) {
+          this.console.error(
+            `Could not evaluate validate() for ${question.name}`
+          );
         }
       } else {
         if (question.answer === undefined) {
@@ -121,15 +162,23 @@ export default {
           someInvalid = true;
         }
       }
-      return (someInvalid ? result : undefined);
+      this.someInvalid = someInvalid;
+      return someInvalid ? result : undefined;
     },
     normalizeChoices(choices) {
       if (Array.isArray(choices)) {
         const mappedChoices = choices.map(value => {
-          if (value === undefined || typeof value === "string" || typeof value === "number") {
+          if (
+            value === undefined ||
+            typeof value === "string" ||
+            typeof value === "number"
+          ) {
             return { name: value, value: value };
           } else {
-            if (value.hasOwnProperty("name") && !value.hasOwnProperty("value")) {
+            if (
+              value.hasOwnProperty("name") &&
+              !value.hasOwnProperty("value")
+            ) {
               return { name: value.name, value: value.name };
             }
           }
@@ -210,7 +259,7 @@ export default {
           if (typeof question._default === "number") {
             index = question._default;
           } else {
-            index = question._choices.findIndex(function (choice) {
+            index = question._choices.findIndex(function(choice) {
               if (question._default) {
                 return choice.value === question._default;
               }
@@ -241,7 +290,11 @@ export default {
             }
 
             // add to answers if choice is marked as checked
-            if (choice.checked === true && !(question.__ForceDefault === true) && !wasPushed) {
+            if (
+              choice.checked === true &&
+              !(question.__ForceDefault === true) &&
+              !wasPushed
+            ) {
               initialAnswersArray.push(choice.value);
             }
           }
@@ -261,10 +314,18 @@ export default {
           if (callback) {
             callback(response);
           }
-        } catch(e) {
-          this.console.error(`Could not evaluate ${methodName}() for ${relevantQuestion.name}`);
+        } catch (e) {
+          this.console.error(
+            `Could not evaluate ${methodName}() for ${relevantQuestion.name}`
+          );
         }
       }
+    },
+    onSubmit() {
+      this.$emit("submitted");
+    },
+    onCancel() {
+      this.$emit("cancelled");
     },
     async onAnswerChanged(name, answer) {
       if (answer === undefined) {
@@ -306,8 +367,10 @@ export default {
                 shouldValidate = true;
               }
               question.shouldShow = response;
-            } catch(e) {
-              this.console.error(`Could not evaluate when() for ${question.name}`);
+            } catch (e) {
+              this.console.error(
+                `Could not evaluate when() for ${question.name}`
+              );
             }
           }
 
@@ -317,8 +380,10 @@ export default {
               try {
                 let response = await question.message(answers);
                 question._message = response;
-              } catch(e) {
-                this.console.error(`Could not evaluate message() for ${question.name}`);
+              } catch (e) {
+                this.console.error(
+                  `Could not evaluate message() for ${question.name}`
+                );
               }
             }
 
@@ -333,8 +398,10 @@ export default {
                   answers[question.name] = question.answer;
                   shouldValidate = true;
                 }
-              } catch(e) {
-                this.console.error(`Could not evaluate choices() for ${question.name}`);
+              } catch (e) {
+                this.console.error(
+                  `Could not evaluate choices() for ${question.name}`
+                );
               }
             }
 
@@ -346,8 +413,10 @@ export default {
                 // optimization: avoid repeatedly calling this.getAnswers()
                 answers[question.name] = question.answer;
                 shouldValidate = true;
-              } catch(e) {
-                this.console.error(`Could not evaluate default() for ${question.name}`);
+              } catch (e) {
+                this.console.error(
+                  `Could not evaluate default() for ${question.name}`
+                );
               }
             }
 
@@ -372,8 +441,10 @@ export default {
           try {
             const filteredAnswer = await question.filter(currentAnswer);
             filteredAnswers[question.name] = filteredAnswer;
-          } catch(e) {
-            this.console.error(`Could not evaluate filter() for ${question.name}`);
+          } catch (e) {
+            this.console.error(
+              `Could not evaluate filter() for ${question.name}`
+            );
           }
         }
       }
@@ -436,7 +507,6 @@ export default {
         // visibility
         const shouldShow = question.when === false ? false : true;
         this.$set(question, "shouldShow", shouldShow);
-
       }
 
       const answers = this.getAnswers();
@@ -447,8 +517,10 @@ export default {
           try {
             let response = await question.when(answers);
             question.shouldShow = response;
-          } catch(e) {
-            this.console.error(`Could not evaluate when() for ${question.name}`);
+          } catch (e) {
+            this.console.error(
+              `Could not evaluate when() for ${question.name}`
+            );
           }
         }
 
@@ -458,8 +530,10 @@ export default {
             try {
               const response = await question.message(answers);
               question._message = response;
-            } catch(e) {
-              this.console.error(`Could not evaluate message() for ${question.name}`);
+            } catch (e) {
+              this.console.error(
+                `Could not evaluate message() for ${question.name}`
+              );
             }
           }
 
@@ -471,8 +545,10 @@ export default {
               question.answer = this.getInitialAnswer(question);
               // optimization: avoid repeatedly calling this.getAnswers()
               answers[question.name] = question.answer;
-            } catch(e) {
-              this.console.error(`Could not evaluate choices() for ${question.name}`);
+            } catch (e) {
+              this.console.error(
+                `Could not evaluate choices() for ${question.name}`
+              );
             }
           }
 
@@ -484,8 +560,10 @@ export default {
 
               // optimization: avoid repeatedly calling this.getAnswers()
               answers[question.name] = question.answer;
-            } catch(e) {
-              this.console.error(`Could not evaluate default() for ${question.name}`);
+            } catch (e) {
+              this.console.error(
+                `Could not evaluate default() for ${question.name}`
+              );
             }
           }
 
@@ -521,10 +599,29 @@ export default {
 }
 
 /* Error validation text div */
-.error-validation-text{
+.error-validation-text {
   font-size: 12px;
   padding-left: 12px;
   color: #ff5252;
+}
+
+div.display-style-default {
+  background-color: transparent;
+}
+
+#submitMessage {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+#inquirerDialogBackground.display-style-submit {
+  background-color: lightgray;
+  padding: 20%;
+}
+
+#inquirerDialog.display-style-submit {
+  background-color: white;
 }
 
 </style>

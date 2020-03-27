@@ -27,12 +27,12 @@ describe('Question of type file browser', () => {
     const wrapper = mount(Form, {});
     wrapper.vm.registerPlugin(fileBrowserPlugin);
     await Vue.nextTick();
-    wrapper.setProps({ questions: questionFileBrowser });
+    wrapper.vm.setQuestions(questionFileBrowser);
     await Vue.nextTick();
     const icon = wrapper.find('button');
     icon.trigger('click');
     await Vue.nextTick();
-    expect(wrapper.props().questions[0].answer).toBe('/home/user');
+    expect(wrapper.vm.questions[0].answer).toBe('/home/user');
   });
 
 });

@@ -25,7 +25,7 @@ describe('Question of type editor and filter func', () => {
     const value1 = "my lines";
 
     const wrapper = mount(Form, {});
-    wrapper.setProps({ questions: questionEditor });
+    wrapper.vm.setQuestions(questionEditor);
     await Vue.nextTick();
 
     const notes = wrapper.find('textarea');

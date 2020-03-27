@@ -52,7 +52,7 @@ const questionExpandWithSeparator = [
 describe('Question of type expand', () => {
   test('Expand', async () => {
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionExpand });
+    wrapper.vm.setQuestions(questionExpand);
     await Vue.nextTick();
 
     const expand = wrapper.find('div[role="listitem"]');
@@ -69,16 +69,16 @@ describe('Question of type expand', () => {
 
   test('Expand with default value (not index)', async () => {
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionExpandDefaultValue });
+    wrapper.vm.setQuestions(questionExpandDefaultValue);
     await Vue.nextTick();
 
     // test answers
-    expect(wrapper.props("questions")[0].answer).toEqual("No");
+    expect(wrapper.vm.questions[0].answer).toEqual("No");
   });
 
   test('Expand without default', async () => {
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionExpandNoDefault });
+    wrapper.vm.setQuestions(questionExpandNoDefault);
     await Vue.nextTick();
 
     const expand = wrapper.findAll('div[role="listitem"');
@@ -94,7 +94,7 @@ describe('Question of type expand', () => {
 
   test('Expand with separator', async () => {
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionExpandWithSeparator });
+    wrapper.vm.setQuestions(questionExpandWithSeparator);
     await Vue.nextTick();
 
     const divider = wrapper.find('hr[role="separator"');
@@ -103,7 +103,7 @@ describe('Question of type expand', () => {
 
   test('Expand with empty choices', async () => {
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionExpandEmptyChoices });
+    wrapper.vm.setQuestions(questionExpandEmptyChoices);
     await Vue.nextTick();
     await Vue.nextTick();
   

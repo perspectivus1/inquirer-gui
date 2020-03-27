@@ -132,12 +132,27 @@ const questionsWhen = [
   }
 ];
 
+const questionSubmit = [
+  {
+    type: "input",
+    name: "username",
+    message: "Username",
+    validate: function (input) {
+      if (input.length === 0) {
+        return "Must enter username";
+      } else {
+        return true;
+      }
+    }
+  }
+];
+
 describe('Questions of type input, password and number', () => {
   test('Input', async () => {
     const value1 = "my input";
 
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionInput });
+    wrapper.vm.setQuestions(questionInput);
     await Vue.nextTick();
 
     const name = wrapper.find('input');
@@ -159,7 +174,7 @@ describe('Questions of type input, password and number', () => {
     const value1 = "m";
 
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionInput });
+    wrapper.vm.setQuestions(questionInput);
     await Vue.nextTick();
 
     const name = wrapper.find('input');
@@ -182,7 +197,7 @@ describe('Questions of type input, password and number', () => {
     const value1 = "my password";
 
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionPassword });
+    wrapper.vm.setQuestions(questionPassword);
     await Vue.nextTick();
 
     const name = wrapper.find('input');
@@ -203,7 +218,7 @@ describe('Questions of type input, password and number', () => {
     const value1 = 5;
 
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionNumber });
+    wrapper.vm.setQuestions(questionNumber);
     await Vue.nextTick();
 
     const name = wrapper.find('input');
@@ -221,7 +236,7 @@ describe('Questions of type input, password and number', () => {
 
   test('Number without default', async () => {
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionNumber });
+    wrapper.vm.setQuestions(questionNumber);
     await Vue.nextTick();
 
     const name = wrapper.find('input');
@@ -230,7 +245,7 @@ describe('Questions of type input, password and number', () => {
 
   test('Input with conditions', async () => {
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionsConditional });
+    wrapper.vm.setQuestions(questionsConditional);
     await Vue.nextTick();
 
     let inputs = wrapper.findAll('input');
@@ -248,7 +263,7 @@ describe('Questions of type input, password and number', () => {
     const newValue = "another value";
 
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionsMessageAsFunction });
+    wrapper.vm.setQuestions(questionsMessageAsFunction);
     await Vue.nextTick();
 
     let inputs = wrapper.findAll('input');
@@ -265,7 +280,7 @@ describe('Questions of type input, password and number', () => {
     const newValue = "another value";
 
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionsDefaultAsFunction });
+    wrapper.vm.setQuestions(questionsDefaultAsFunction);
     await Vue.nextTick();
 
     let inputs = wrapper.findAll('input');
@@ -280,7 +295,7 @@ describe('Questions of type input, password and number', () => {
 
   test('Input with no message', async () => {
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionInputNoMessage });
+    wrapper.vm.setQuestions(questionInputNoMessage);
     await Vue.nextTick();
 
     const inputs = wrapper.findAll('p.question-label');
@@ -290,20 +305,43 @@ describe('Questions of type input, password and number', () => {
 
   test('Input with exception in default()', async () => {
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionInputDefaultException });
+    wrapper.vm.setQuestions(questionInputDefaultException);
     await Vue.nextTick();
 
-    expect(wrapper.props("questions")[0]._default).toBeUndefined();
+    expect(wrapper.vm.questions[0]._default).toBeUndefined();
   });
 
   test('when() evaluates to false', async () => {
     const wrapper = mount(Form, { });
-    wrapper.setProps({ questions: questionsWhen });
+    wrapper.vm.setQuestions(questionsWhen);
     await Vue.nextTick();
     await Vue.nextTick();
     await Vue.nextTick();
 
     expect(wrapper.vm.questions[1].shouldShow).toBe(false);
     expect(wrapper.vm.getIssues()).toBe(undefined);
+  });
+
+  test('submit style', async () => {
+    const wrapper = mount(Form, { });
+    const options = {
+      style:"submit",
+      submitMessage: "Please login",
+      submitButtonText:"Login"
+    };
+    wrapper.vm.setQuestions(questionSubmit, options);
+    await Vue.nextTick();
+    await Vue.nextTick();
+
+    const submitButton = wrapper.find('button#submit');
+    expect(submitButton.attributes("disabled")).toEqual("disabled");
+
+    const name = wrapper.find('input');
+    name.element.value = "xxxx";
+    name.trigger('input');
+
+    // wait to account for debounce
+    await utils.sleep(300);
+    expect(submitButton.attributes("disabled")).toEqual(undefined);
   });
 });

@@ -13,7 +13,7 @@
               <v-icon
                 v-on="on"
                 @click="onSelectFile"
-              >mdi-folder-outline</v-icon>
+              >mdi-file-outline</v-icon>
             </template>
             <span>Browse for files</span>
           </v-tooltip>

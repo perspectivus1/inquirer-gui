@@ -1,28 +1,34 @@
 import Vue from "vue";
 import App from "./App.vue";
-import Form from "@sap-devx/inquirer-gui";
+// import Form from "@sap-devx/inquirer-gui";
 import "@sap-devx/inquirer-gui/dist/form.css";
 // For development use local file:
-// import Form from "../../src/index";
+import Form from "../../src/index";
+
+const questions0 = [
+  {
+    name: "username",
+    message: "Username",
+    type: "input",
+    validate: function (answer) {
+      if (answer.length === 0) {
+        return "Must enter a username"
+      } else {
+        return true;
+      }
+    }
+    // guiType: "username"
+  },
+  {
+    name: "password",
+    message: "Password",
+    type: "password"
+  }
+];
 
 const questions1 = [
   {
     name: "noType",
-  },
-  {
-    type: "password",
-    guiType: "login",
-    name: "login",
-    message: "Login",
-    default: "",
-    validate: async function (answer, answers) {
-      if (!answer) {
-        return "Must enter password"
-      } else {
-        // perform login
-        return true;
-      }
-    }
   },
   {
     type: "input",
@@ -35,9 +41,14 @@ const questions1 = [
     }
   },
   {
-      type: "date",
-      name: "birthday",
-      message: "Birthday"
+    type: "input",
+    guiType: "folder-browser",
+    name: "folder1",
+    message: "Folder 1",
+    default: "/home/",
+    getPath: async function (currentPath) {
+        return `${currentPath}subdir/`;
+    }
   },
   {
       type: "input",
@@ -167,7 +178,7 @@ const questions2 = [
     }
   }
 ];
-const questionsArray = [questions1, questions2];
+const questionsArray = [questions0, questions1, questions2];
 
 import vuetify from "./plugins/vuetify";
 
@@ -183,13 +194,13 @@ let vueOptions = {
     }
   },
   methods: {
-    prompt(questions) {
-      this.$children[0].questions = questions;
+    prompt(questions, options) {
+      this.$children[0].prompt(questions, options);
     }
   },
   mounted() {
     console.log('sample app is mounted');
-    this.prompt(questionsArray[0]);
+    this.prompt(questionsArray[0], {style:"submit", submitMessage: "Please login", submitButtonText:"Login"});
   },
 };
 
@@ -202,9 +213,9 @@ if (options.vuetify) {
 export default new Vue(
   vueOptions
 ).$on('next', function () {
-  if (this.questionsIndex === 0) {
-    this.questionsIndex = 1;
-    this.prompt(questionsArray[1]);
+  if (this.questionsIndex < 2) {
+    this.questionsIndex++;
+    this.prompt(questionsArray[this.questionsIndex]);
   }
 }
 ).$mount('#app');

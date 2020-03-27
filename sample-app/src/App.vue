@@ -1,8 +1,8 @@
 <template>
   <v-app id="app" class="vscode">
-    <v-row>
+    <v-row style="margin-left:0px;">
       <v-col>
-        <Form ref="form" :questions="questions" @answered="onAnswered" />
+        <Form ref="form" @answered="onAnswered" @submitted="onSubmit" @cancelled="onCancel"/>
       </v-col>
       <v-col>
         <Answers v-if="this.issues === undefined" :answers="answers" />
@@ -28,7 +28,8 @@ import { RpcBrowserWebSockets } from "@sap-devx/webview-rpc/out.browser/rpc-brow
 import main from "./main.js";
 import DatePlugin from "@sap-devx/inquirer-gui-date-plugin";
 import FileBrowserPlugin from "@sap-devx/inquirer-gui-file-browser-plugin";
-import LoginPlugin from "@sap-devx/inquirer-gui-login-plugin";
+import FolderBrowserPlugin from "@sap-devx/inquirer-gui-folder-browser-plugin";
+// import LoginPlugin from "@sap-devx/inquirer-gui-login-plugin";
 
 /**
  * If you want to make changes to the plugins from source in this repo
@@ -56,6 +57,12 @@ export default {
       this.answers = answers;
       this.issues = issues;
     },
+    onSubmit() {
+      this.onNext();
+    },
+    onCancel() {
+
+    },
     onNext() {
       main.$emit("next");
     },
@@ -80,7 +87,7 @@ export default {
         };
       }
     },
-    prompt(questions) {
+    prompt(questions, options) {
       for (let question of questions) {
         for (let prop in question) {
           if (question[prop] === "__Function") {
@@ -96,7 +103,7 @@ export default {
           }
         }
       }
-      this.questions = questions;
+      this.$refs.form.setQuestions(questions, options);
     },
     initRpc() {
       const functions = ["prompt"];
@@ -121,8 +128,12 @@ export default {
     this.$refs.form.registerPlugin(options.plugin);
 
     options = {};
-    Vue.use(LoginPlugin, options);
+    Vue.use(FolderBrowserPlugin, options);
     this.$refs.form.registerPlugin(options.plugin);
+
+    // options = {};
+    // Vue.use(LoginPlugin, options);
+    // this.$refs.form.registerPlugin(options.plugin);
 
     this.setupRpc();
     const mutationCallback = mutationsList => {
