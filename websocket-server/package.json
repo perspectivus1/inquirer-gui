@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@sap-devx/webview-rpc": "^0.2.0",
+    "data-uri-to-buffer": "^3.0.0",
     "ws": "^7.2.1"
   }
 }

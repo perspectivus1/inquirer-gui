@@ -1,3 +1,8 @@
+const dataUriToBuffer = require("data-uri-to-buffer");
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
+
 function funcReplacer(key, value) {
   return (typeof value === 'function') ? "__Function" : value;
 }
@@ -8,11 +13,32 @@ function normalizeFunctions(questions) {
 
 const questions1 = [
   {
+    name: "localFile",
+    message: "Choose a local file",
+    type: "input",
+    guiType: "file-upload",
+    receiveFile: async (fileName, fileContents) => {
+      const promise = new Promise((resolve, reject) => {
+        const decoded = dataUriToBuffer(fileContents);
+        const fullPath = path.join(os.tmpdir(), fileName);
+          fs.writeFile(fullPath, decoded, (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(`File ${fullPath} saved`);
+          }
+        });
+      });
+
+      return await promise;
+    }
+  },
+  {
     type: "input",
     name: "name",
     message: "Your name (backend)",
     default: "Jack",
-    validate: function(input) {
+    validate: (input) => {
       if (input.length >= 2) {
         return true;
       } else {
@@ -98,7 +124,7 @@ module.exports = class InquirerGuiBackend {
       }
     }
     if (relevantQuestion !== undefined) {
-      const response = await relevantQuestion[methodName].apply(this.questions, params);
+      const response = await relevantQuestion[methodName].apply(this, params);
       console.log(response);
       return response;
     }

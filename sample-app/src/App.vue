@@ -31,6 +31,7 @@ import FileBrowserPlugin from "@sap-devx/inquirer-gui-file-browser-plugin";
 import LoginPlugin from "@sap-devx/inquirer-gui-login-plugin";
 import TilesPlugin from "@sap-devx/inquirer-gui-tiles-plugin";
 import QuestionSampleTiles from "./QuestionSampleTiles";
+import QuestionFileUpload from "./QuestionFileUpload";
 
 /**
  * If you want to make changes to the plugins from source in this repo
@@ -130,9 +131,15 @@ export default {
     Vue.use(TilesPlugin, options);
     this.$refs.form.registerPlugin(options.plugin);
 
-    const plugin = {
+    let plugin = {
       questionType: "sample-tiles",
       component: QuestionSampleTiles
+    };
+    this.$refs.form.registerPlugin(plugin);
+
+    plugin = {
+      questionType: "file-upload",
+      component: QuestionFileUpload
     };
     this.$refs.form.registerPlugin(plugin);
 
