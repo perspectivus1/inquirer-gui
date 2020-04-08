@@ -1,4 +1,8 @@
 import { IRpc } from "@sap-devx/webview-rpc/out.ext/rpc-common";
+import * as os from "os";
+import * as fs from "fs";
+import * as path from "path";
+const dataUriToBuffer = require("data-uri-to-buffer");
 
 function funcReplacer(key: any, value: any) {
     return (typeof value === 'function') ? "__Function" : value;
@@ -10,6 +14,27 @@ function normalizeFunctions(questions: Array<any>) {
 
 const questions1 = [
     {
+        name: "localFile",
+        message: "Choose a local file",
+        type: "input",
+        guiType: "file-upload",
+        receiveFile: async (fileName: string, fileContents: string) => {
+          const promise = new Promise((resolve, reject) => {
+            const decoded = dataUriToBuffer(fileContents);
+            const fullPath = path.join(os.tmpdir(), fileName);
+              fs.writeFile(fullPath, decoded, (err) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(`File ${fullPath} saved`);
+              }
+            });
+          });
+
+          return await promise;
+        }
+      },
+          {
         type: "input",
         guiType: "file-browser",
         name: "configFile",

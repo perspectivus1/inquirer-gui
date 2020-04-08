@@ -34,7 +34,8 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"dependencies": {
-		"@sap-devx/webview-rpc": "^0.2.0"
+		"@sap-devx/webview-rpc": "^0.2.0",
+		"data-uri-to-buffer": "^3.0.0"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
