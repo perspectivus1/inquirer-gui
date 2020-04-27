@@ -8,7 +8,7 @@
       >{{question._message}}</p>
       <component
         v-if="question.shouldShow"
-        :is="getComponentByQuestionType(question.guiType ? question.guiType: question.type)"
+        :is="getComponentByQuestionType(question.type, question.guiType)"
         :key="index"
         :question="question"
         @answerChanged="onAnswerChanged"
@@ -86,8 +86,18 @@ export default {
       question.isValid = true;
       question.validationMessage = "";
     },
-    getComponentByQuestionType(questionType) {
-      const foundPlugin = this.plugins.find(plugin => {
+    getComponentByQuestionType(questionType, guiType) {
+      let foundPlugin;
+      if (guiType) {
+        foundPlugin = this.plugins.find(plugin => {
+          return plugin.questionType === guiType;
+        });
+        if (foundPlugin) {
+          return foundPlugin.component;
+        }
+      }
+
+      foundPlugin = this.plugins.find(plugin => {
         return plugin.questionType === questionType;
       });
       if (foundPlugin) {

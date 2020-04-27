@@ -11,6 +11,26 @@ const WORKFLOW_IMAGE = require("./workflowImage").default;
 
 const questions0 = [
   {
+    type: "list",
+    guiType: "remote-object-table",
+    name: "remoteObject",
+    message: "Remote Object",
+    choices: async (answers) => {
+      const choices = [];
+      for (let i=0; i<3; i++) {
+        choices.push({
+          value: `${i} DATABASE_VALUE`,
+          database: `${i} DATABASE_NAME`,
+          schema: `${i} SCHEMA`,
+          object: `${i} OBJECT`,
+          type: `${i} TYPE`
+        });
+      }
+
+      return choices;
+    }
+  },
+  {
     name: "appType", 
     message: "",
     type: "list",
@@ -22,8 +42,18 @@ const questions0 = [
     default: "masterDetail"
   }
 ];
-  
+
 const questions1 = [
+  {
+    type: "input",
+    guiType: "file-browser",
+    name: "configFile",
+    message: "Config file (vscode)",
+    default: "/home/",
+    getFilePath: async function (currentPath) {
+        return `${currentPath}subdir/`;
+    }
+  },
   {
     name: "noType",
   },
@@ -40,16 +70,6 @@ const questions1 = [
         // perform login
         return true;
       }
-    }
-  },
-  {
-    type: "input",
-    guiType: "file-browser",
-    name: "configFile",
-    message: "Config file (vscode)",
-    default: "/home/",
-    getFilePath: async function (currentPath) {
-        return `${currentPath}subdir/`;
     }
   },
   {
