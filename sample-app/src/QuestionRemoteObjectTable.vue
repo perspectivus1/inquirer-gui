@@ -1,64 +1,63 @@
 <template>
   <div class="remote-object">
-<v-container class="search-fields">
-    <v-row align="top" justify="center">
-      <v-col>
-        <p class="question-label">Database:</p>
-        <v-select
-          :items="databases"
-          hide-details="auto"
-        ></v-select>
-      </v-col>
+    <v-container class="search-fields">
+      <v-row justify="center">
+        <v-col>
+          <p class="question-label">Database:</p>
+          <v-select
+            :items="databases"
+            hide-details="auto"
+            v-model="database"
+            dense
+          ></v-select>
+        </v-col>
 
-      <v-col>
-        <p class="question-label">Schema:</p>
-        <v-select
-          :items="schemas"
-          hide-details="auto"
-        ></v-select>
-      </v-col>
+        <v-col>
+          <p class="question-label">Schema:</p>
+          <v-select
+            :items="schemas"
+            hide-details="auto"
+            v-model=schema
+            dense
+          ></v-select>
+        </v-col>
 
-      <v-col>
-        <p class="question-label">Object:</p>
-        <v-input
-        ></v-input>
-      </v-col>
+        <v-col>
+          <p class="question-label">Object:</p>
+          <v-text-field
+            hide-details="auto"
+            v-model="object"
+            dense
+          ></v-text-field>
+        </v-col>
 
-      <v-col>
-        <p class="question-label">Type:</p>
-        <v-select
-          :items="types"
-          hide-details="auto"
-        ></v-select>
-      </v-col>
-    </v-row>
-    <v-row justify="end">
-      <v-btn>Search</v-btn>
-    </v-row>
-</v-container>
+        <v-col>
+          <p class="question-label">Type:</p>
+          <v-select
+            :items="types"
+            hide-details="auto"
+            v-model="type"
+            dense
+          ></v-select>
+        </v-col>
+      </v-row>
+      <v-row justify="end">
+        <v-btn @click="doSearch">Search</v-btn>
+      </v-row>
+    </v-container>
     <v-data-table
       v-model="selected"
       :headers="headers"
-      :items="question._choices"
-      item-key="name"
+      :items="objects"
+      item-key="database"
       :single-select="false"
       show-select
       hide-default-footer
       dense
       flat
       class="table"
+      @input="onAnswerChanged"
     >
-      <template v-slot:body="{ items }">
-        <tbody>
-          <tr v-for="(item, itemIndex) in items" :key="itemIndex">
-            <td><v-simple-checkbox v-model="item.glutenfree"></v-simple-checkbox></td>
-            <td>{{ item.database }}</td>
-            <td>{{ item.schema }}</td>
-            <td>{{ item.object }}</td>
-            <td>{{ item.type }}</td>
-          </tr>
-        </tbody>
-      </template>
     </v-data-table>
   </div>
 </template>
@@ -79,86 +78,55 @@ export default {
         { text: "Object", value: "object" },
         { text: "Type", value: "type" }
       ],
-      databases: ["<NULL>"],
-      schemas: ["schema1", "schema2"],
-      types: ["TABLE"]
+      database: "",
+      schema: "",
+      object: "",
+      type: "",
+      databases: [],
+      schemas: [],
+      objects: [],
+      types: []
     };
   },
-  watch: {
-    "question.answer": {
-      handler: function(newValue, oldValue) {
-        this.applyStyles(newValue, oldValue);
-      }
-    }
-  },
   methods: {
-    applyStyles(newAnswer, oldAnswer) {
-      this.toggleSelected(oldAnswer); // deselect old selection
-      this.toggleSelected(newAnswer); // select new selection
-    },
-    toggleSelected(answer) {
-      if (answer) {
-        const element = document.querySelector(
-          `.v-card[data-itemvalue='${answer}']`
-        );
-        if (element) {
-          element.classList.toggle("selected");
-        }
-      }
-    },
     onAnswerChanged(value) {
       this.$emit("answerChanged", this.question.name, value);
+    },
+    async doSearch() {
+      const rawObjects = await this.question.search(this.database, this.schema, this.object, this.type);
+      const objects = this.prepObjects(rawObjects);
+      this.objects = objects;
+    },
+    prepObjects: function(rawObjects) {
+      const items = [];
+      for (const item of rawObjects) {
+        items.push({
+          value: item.value,
+          database: item.database,
+          schema: item.schema,
+          object: item.object,
+          type: item.type
+        });
+      }
+      return items;
     }
   },
   props: {
     question: Object
   },
-  mounted: function() {
-    this.applyStyles(this.question.answer, undefined);
+  mounted: async function() {
+    this.databases = await this.question.getDatabases();
+    this.schemas = await this.question.getSchemas();
+    this.types = await this.question.getTypes();
   }
 };
 </script>
 
 <style>
-.v-card.selected {
-  border: 1px solid;
-}
-.v-card {
-  border: none;
-}
-.v-card__title {
-  word-wrap: break-word;
-  word-break: normal;
-}
-.description.v-card__text {
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.homepage.v-card__text {
-  padding-bottom: 0;
-}
-a {
-  font-size: 11px;
-}
-.tiles-row {
-  margin: 0px;
-}
-.tile-image-container {
-  max-height: 40%;
-}
-.tile-image-container > img {
-  object-fit: scale-down;
-  width: 100%;
-  height: 100%;
-}
-
-.v-text-field.v-select {
-  padding-top: 0;
-}
 .remote-object > .table {
-    border-style: solid;
-    border-radius: 0;
-    border-width: thin;
+  border-style: solid;
+  border-radius: 0;
+  border-width: thin;
 }
 .remote-object > .search-fields {
   padding: 0;

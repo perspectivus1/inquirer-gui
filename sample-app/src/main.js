@@ -11,23 +11,31 @@ const WORKFLOW_IMAGE = require("./workflowImage").default;
 
 const questions0 = [
   {
-    type: "list",
+    type: "input",
     guiType: "remote-object-table",
     name: "remoteObject",
     message: "Remote Object",
-    choices: async (answers) => {
-      const choices = [];
+    getDatabases: async () => {
+      return ["<NULL>"];
+    },
+    getSchemas: async () => {
+      return ["schema 1", "schema 2"];
+    },
+    getTypes: async () => {
+      return ["TABLE"];
+    },
+    search: async (database, schema, object, type) => {
+      const remoteObjects = [];
       for (let i=0; i<3; i++) {
-        choices.push({
+        remoteObjects.push({
           value: `${i} DATABASE_VALUE`,
-          database: `${i} DATABASE_NAME`,
-          schema: `${i} SCHEMA`,
-          object: `${i} OBJECT`,
-          type: `${i} TYPE`
+          database: `${i}-${database} DATABASE_NAME`,
+          schema: `${i}-${schema} SCHEMA`,
+          object: `${i}-${object} OBJECT`,
+          type: `${i}-${type} TYPE`
         });
       }
-
-      return choices;
+      return remoteObjects;
     }
   },
   {
