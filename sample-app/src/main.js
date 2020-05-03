@@ -11,8 +11,8 @@ const WORKFLOW_IMAGE = require("./workflowImage").default;
 
 const questions0 = [
   {
-    type: "input",
-    guiType: "remote-object-table",
+    type: "checkbox",
+    guiType: "remote-object-selection",
     name: "remoteObject",
     message: "Remote Object",
     getDatabases: async () => {
@@ -24,11 +24,17 @@ const questions0 = [
     getTypes: async () => {
       return ["TABLE"];
     },
+    choices: () => {
+      return [{
+        value: `REMOTE_OBJECT_VALUE`,
+        name: `Run in @sap-devx/inquirer-gui`
+      }];
+    },
     search: async (database, schema, object, type) => {
       const remoteObjects = [];
       for (let i=0; i<3; i++) {
         remoteObjects.push({
-          value: `${i} DATABASE_VALUE`,
+          value: `${i} REMOTE_OBJECT_VALUE`,
           database: `${i}-${database} DATABASE_NAME`,
           schema: `${i}-${schema} SCHEMA`,
           object: `${i}-${object} OBJECT`,

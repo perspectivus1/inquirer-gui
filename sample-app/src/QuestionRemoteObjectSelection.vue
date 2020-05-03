@@ -4,67 +4,51 @@
       <v-row justify="center">
         <v-col>
           <p class="question-label">Database:</p>
-          <v-select
-            :items="databases"
-            hide-details="auto"
-            v-model="database"
-            dense
-          ></v-select>
+          <v-select :items="databases" hide-details="auto" v-model="database" dense></v-select>
         </v-col>
 
         <v-col>
           <p class="question-label">Schema:</p>
-          <v-select
-            :items="schemas"
-            hide-details="auto"
-            v-model=schema
-            dense
-          ></v-select>
+          <v-select :items="schemas" hide-details="auto" v-model="schema" dense></v-select>
         </v-col>
 
         <v-col>
           <p class="question-label">Object:</p>
-          <v-text-field
-            hide-details="auto"
-            v-model="object"
-            dense
-          ></v-text-field>
+          <v-text-field hide-details="auto" v-model="object" dense></v-text-field>
         </v-col>
 
         <v-col>
           <p class="question-label">Type:</p>
-          <v-select
-            :items="types"
-            hide-details="auto"
-            v-model="type"
-            dense
-          ></v-select>
+          <v-select :items="types" v-model="type" hide-details="auto" dense></v-select>
         </v-col>
       </v-row>
       <v-row justify="end">
-        <v-btn @click="doSearch">Search</v-btn>
+        <v-btn @click="doSearch" outlined tile>Search</v-btn>
+      </v-row>
+      <v-row>
+        <v-col>
+        <v-data-table
+          v-model="selected"
+          :headers="headers"
+          :items="objects"
+          item-key="database"
+          :single-select="false"
+          show-select
+          hide-default-footer
+          dense
+          flat
+          class="table"
+          @input="onAnswerChanged"
+        ></v-data-table>
+        </v-col>
       </v-row>
     </v-container>
-    <v-data-table
-      v-model="selected"
-      :headers="headers"
-      :items="objects"
-      item-key="database"
-      :single-select="false"
-      show-select
-      hide-default-footer
-      dense
-      flat
-      class="table"
-      @input="onAnswerChanged"
-    >
-    </v-data-table>
   </div>
 </template>
 
 <script>
 export default {
-  name: "QuestionRemoteObjectTable",
+  name: "QuestionRemoteObjectSelection",
   data() {
     return {
       selected: [],
@@ -90,10 +74,19 @@ export default {
   },
   methods: {
     onAnswerChanged(value) {
-      this.$emit("answerChanged", this.question.name, value);
+      const response = [];
+      for (const answer of value) {
+        response.push(answer.value);
+      }
+      this.$emit("answerChanged", this.question.name, response);
     },
     async doSearch() {
-      const rawObjects = await this.question.search(this.database, this.schema, this.object, this.type);
+      const rawObjects = await this.question.search(
+        this.database,
+        this.schema,
+        this.object,
+        this.type
+      );
       const objects = this.prepObjects(rawObjects);
       this.objects = objects;
     },

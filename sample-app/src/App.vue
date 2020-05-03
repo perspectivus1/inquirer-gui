@@ -31,7 +31,7 @@ import FileBrowserPlugin from "@sap-devx/inquirer-gui-file-browser-plugin";
 import LoginPlugin from "@sap-devx/inquirer-gui-login-plugin";
 import TilesPlugin from "@sap-devx/inquirer-gui-tiles-plugin";
 import QuestionSampleTiles from "./QuestionSampleTiles";
-import QuestionRemoteObjectTable from "./QuestionRemoteObjectTable";
+import QuestionRemoteObjectSelection from "./QuestionRemoteObjectSelection";
 
 /**
  * If you want to make changes to the plugins from source in this repo
@@ -138,8 +138,8 @@ export default {
     this.$refs.form.registerPlugin(plugin);
 
     plugin = {
-      questionType: "remote-object-table",
-      component: QuestionRemoteObjectTable
+      questionType: "remote-object-selection",
+      component: QuestionRemoteObjectSelection
     };
     this.$refs.form.registerPlugin(plugin);
 
