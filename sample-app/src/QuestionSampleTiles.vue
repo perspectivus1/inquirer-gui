@@ -27,10 +27,10 @@
                 <v-card-text class="description">
                   {{item.description}}
                 </v-card-text>
-                <v-spacer></v-spacer>
                 <v-card-text class="homepage">
                   <a :href="item.homepage">More Information</a>
                  </v-card-text>
+                <v-spacer></v-spacer>
                 <v-card-actions class="tile-image-container">
                   <img :src="item.image" v-if="item.image"/>
                 </v-card-actions>
@@ -93,8 +93,11 @@ export default {
 .description.v-card__text {
   text-overflow: ellipsis;
   overflow: hidden;
+  padding-bottom: 0;
+  max-height:30%;
 }
 .homepage.v-card__text {
+  padding-top: 0;
   padding-bottom: 0;
 }
 a {
@@ -104,7 +107,7 @@ a {
   margin: 0px;
 }
 .tile-image-container {
-  max-height:40%;
+  max-height:50%;
 }
 .tile-image-container > img {
   object-fit: scale-down;
