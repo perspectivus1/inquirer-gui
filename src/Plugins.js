@@ -5,10 +5,12 @@ import QuestionList from "./packages/QuestionList";
 import QuestionConfirm from "./packages/QuestionConfirm";
 import QuestionCheckbox from "./packages/QuestionCheckbox";
 import QuestionExpand from "./packages/QuestionExpand";
+import QuestionInputNative from "./packages/QuestionInputNative";
 
 export default {
   registerBuiltinPlugins: function() {
     // register builtin form elements
+    Vue.component('QuestionInputNative', QuestionInputNative);
     Vue.component('QuestionInput', QuestionInput);
     Vue.component('QuestionEditor', QuestionEditor);
     Vue.component('QuestionList', QuestionList);
@@ -20,6 +22,10 @@ export default {
       {
         questionType: "input",
         component: QuestionInput
+      },
+      {
+        questionType: "input-native",
+        component: QuestionInputNative
       },
       {
         questionType: "password",

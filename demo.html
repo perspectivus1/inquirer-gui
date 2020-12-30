@@ -1,0 +1,24 @@
+<meta charset="utf-8">
+<title>form-wc demo</title>
+<script src="https://unpkg.com/vue"></script>
+<script src="./dist/form-wc.js"></script>
+
+<form-wc></form-wc>
+
+<script>
+    const formElements = document.getElementsByTagName("form-wc");
+    formElements[0].questions = [
+        {
+            message:"Hello",
+            guiOptions: {
+                type: "input-native"
+            }
+        },
+        {
+            message:"World",
+            guiOptions: {
+                type: "input-native"
+            }
+        }
+    ];
+</script>
