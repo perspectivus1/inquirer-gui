@@ -9,15 +9,19 @@
     const formElements = document.getElementsByTagName("form-wc");
     formElements[0].questions = [
         {
-            message:"Hello",
+            name: "firstName",
+            message: "First Name (native)",
+            default: "James",
             guiOptions: {
                 type: "input-native"
             }
         },
         {
-            message:"World",
+            name: "lastName",
+            message: "Last Name (Funamental)",
+            default: "Bond",
             guiOptions: {
-                type: "input-native"
+                type: "input-fundamental"
             }
         }
     ];

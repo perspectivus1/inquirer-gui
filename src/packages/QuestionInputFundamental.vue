@@ -1,24 +1,17 @@
 <template>
   <input
+    class="fd-input"
     :value="question.answer"
     :type="getInputType(question.type)"
     @input="onInput"
   />
-
-  <!-- <v-text-field
-    class="pa-0 ma-0"
-    :value="question.answer"
-    hide-details="auto"
-    outlined
-    dense
-  ></v-text-field> -->
 </template>
 
 <script>
 import utils from "../utils";
 
 export default {
-  name: "QuestionInputNative",
+  name: "QuestionInputFundamental",
   props: {
     question: Object,
   },
@@ -41,12 +34,5 @@ export default {
 </script>
 
 <style>
-.v-input {
-  margin: 0;
-  padding: 0px;
-}
-
-.col {
-  padding-bottom: 0px;
-}
+  @import "https://unpkg.com/fundamental-styles@latest/dist/fundamental-styles.css";
 </style>
