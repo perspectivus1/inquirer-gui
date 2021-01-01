@@ -7,6 +7,7 @@ import QuestionCheckbox from "./packages/QuestionCheckbox";
 import QuestionExpand from "./packages/QuestionExpand";
 import QuestionInputNative from "./packages/QuestionInputNative";
 import QuestionInputFundamental from "./packages/QuestionInputFundamental";
+import QuestionListFundamental from "./packages/QuestionListFundamental";
 
 export default {
   registerBuiltinPlugins: function() {
@@ -16,6 +17,7 @@ export default {
     Vue.component('QuestionInput', QuestionInput);
     Vue.component('QuestionEditor', QuestionEditor);
     Vue.component('QuestionList', QuestionList);
+    Vue.component('QuestionListFundamental', QuestionListFundamental);
     Vue.component('QuestionConfirm', QuestionConfirm);
     Vue.component('QuestionCheckbox', QuestionCheckbox);
     Vue.component('QuestionExpand', QuestionExpand);
@@ -48,6 +50,10 @@ export default {
       {
         questionType: "list",
         component: QuestionList
+      },
+      {
+        questionType: "list-fundamental",
+        component: QuestionListFundamental
       },
       {
         questionType: "rawlist",

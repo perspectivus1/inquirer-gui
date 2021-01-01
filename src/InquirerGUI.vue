@@ -32,7 +32,7 @@
       >{{question.validationMessage}}</div>
     </template>
 	<!-- <v-text-field id="form-single-input-issue-key-enter-workaround" style="display:none;"/> -->
-  <v-form>
+  <form>
 </template>
 
 <script>
@@ -41,7 +41,7 @@ const assert = require('assert');
 
 const NOT_ANSWERED = "Mandatory field";
 export default {
-  name: "Form",
+  name: "InquirerGUI",
   props: {
     questions: Array
   },

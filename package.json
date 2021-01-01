@@ -17,7 +17,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib --name form src/index.js",
-    "build-form-wc": "vue-cli-service build --target wc --name form-wc src/Form.vue --inline-vue",
+    "build-wc": "vue-cli-service build --target wc --name inquirer-gui src/InquirerGUI.vue --inline-vue",
     "build-for-sample": "vue-cli-service build --target lib --name form src/index.js --dest sample-app/form",
     "build-dev": "vue-cli-service build --mode development",
     "lint": "vue-cli-service lint",

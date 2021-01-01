@@ -1,12 +1,11 @@
 <meta charset="utf-8">
-<title>form-wc demo</title>
-<script src="https://unpkg.com/vue"></script>
-<script src="./dist/form-wc.js"></script>
+<title>inquirer-gui as a web component</title>
+<script src="./dist/inquirer-gui.js"></script>
 
-<form-wc></form-wc>
+<inquirer-gui></inquirer-gui>
 
 <script>
-    const formElements = document.getElementsByTagName("form-wc");
+    const formElements = document.getElementsByTagName("inquirer-gui");
     formElements[0].questions = [
         {
             name: "firstName",
@@ -22,6 +21,14 @@
             default: "Bond",
             guiOptions: {
                 type: "input-fundamental"
+            }
+        },
+        {
+            name: "fruit",
+            type: "list",
+            message: "Select a fruit (Fundamental)",
+            guiOptions: {
+                type: "list-fundamental"
             }
         }
     ];
