@@ -2,7 +2,7 @@
   <v-app id="app" class="vscode">
     <v-row>
       <v-col>
-        <Form ref="form" :questions="questions" @answered="onAnswered" />
+        <InquirerGUI ref="form" :questions="questions" @answered="onAnswered" />
       </v-col>
       <v-col>
         <Answers v-if="this.issues === undefined" :answers="answers" />
@@ -31,6 +31,7 @@ import FileBrowserPlugin from "@sap-devx/inquirer-gui-file-browser-plugin";
 import LoginPlugin from "@sap-devx/inquirer-gui-login-plugin";
 import TilesPlugin from "@sap-devx/inquirer-gui-tiles-plugin";
 import QuestionSampleTiles from "./QuestionSampleTiles";
+import InquirerGUI from '../../src/InquirerGUI.vue';
 
 /**
  * If you want to make changes to the plugins from source in this repo
@@ -43,7 +44,8 @@ export default {
   name: "app",
   components: {
     Answers,
-    Issues
+    Issues,
+    InquirerGUI
   },
   data() {
     return {

@@ -32,7 +32,7 @@
       >{{question.validationMessage}}</div>
     </template>
 	<!-- <v-text-field id="form-single-input-issue-key-enter-workaround" style="display:none;"/> -->
-  <form>
+  </form>
 </template>
 
 <script>
@@ -613,5 +613,13 @@ export default {
 .question-hint {
   padding-left: 4px;
 }
+
+  @font-face {
+    font-family: "SAP-icons";
+    src: url("https://cdn.jsdelivr.net/npm/@sap-theming/theming-base-content@11.1.24/content/Base/baseLib/sap_fiori_3/fonts/SAP-icons.woff")
+        format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
 
 </style>

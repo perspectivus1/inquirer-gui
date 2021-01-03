@@ -8,32 +8,26 @@ import QuestionExpand from "./packages/QuestionExpand";
 import QuestionInputNative from "./packages/QuestionInputNative";
 import QuestionInputFundamental from "./packages/QuestionInputFundamental";
 import QuestionListFundamental from "./packages/QuestionListFundamental";
+import QuestionCheckboxFundamental from "./packages/QuestionCheckboxFundamental";
 
 export default {
   registerBuiltinPlugins: function() {
     // register builtin form elements
-    Vue.component('QuestionInputNative', QuestionInputNative);
-    Vue.component('QuestionInputFundamental', QuestionInputFundamental);
     Vue.component('QuestionInput', QuestionInput);
     Vue.component('QuestionEditor', QuestionEditor);
     Vue.component('QuestionList', QuestionList);
-    Vue.component('QuestionListFundamental', QuestionListFundamental);
     Vue.component('QuestionConfirm', QuestionConfirm);
     Vue.component('QuestionCheckbox', QuestionCheckbox);
     Vue.component('QuestionExpand', QuestionExpand);
+    Vue.component('QuestionInputFundamental', QuestionInputFundamental);
+    Vue.component('QuestionListFundamental', QuestionListFundamental);
+    Vue.component('QuestionCheckboxFundamental', QuestionCheckboxFundamental);
+    Vue.component('QuestionInputNative', QuestionInputNative);
 
     const plugins = [
       {
         questionType: "input",
         component: QuestionInput
-      },
-      {
-        questionType: "input-native",
-        component: QuestionInputNative
-      },
-      {
-        questionType: "input-fundamental",
-        component: QuestionInputFundamental
       },
       {
         questionType: "password",
@@ -52,10 +46,6 @@ export default {
         component: QuestionList
       },
       {
-        questionType: "list-fundamental",
-        component: QuestionListFundamental
-      },
-      {
         questionType: "rawlist",
         component: QuestionList
       },
@@ -70,7 +60,23 @@ export default {
       {
         questionType: "expand",
         component: QuestionExpand
-      }
+      },
+      {
+        questionType: "input-native",
+        component: QuestionInputNative
+      },
+      {
+        questionType: "input-fundamental",
+        component: QuestionInputFundamental
+      },
+      {
+        questionType: "checkbox-fundamental",
+        component: QuestionCheckboxFundamental
+      },
+      {
+        questionType: "list-fundamental",
+        component: QuestionListFundamental
+      },
     ];
     return plugins;
   }

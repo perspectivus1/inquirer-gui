@@ -1,7 +1,17 @@
 <meta charset="utf-8">
 <title>inquirer-gui as a web component</title>
 <script src="./dist/inquirer-gui.js"></script>
+<style>
 
+@font-face {
+    font-family: "SAP-icons";
+    src: url("https://cdn.jsdelivr.net/npm/@sap-theming/theming-base-content@11.1.24/content/Base/baseLib/sap_fiori_3/fonts/SAP-icons.woff")
+        format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+</style>
 <inquirer-gui></inquirer-gui>
 
 <script>
@@ -13,6 +23,9 @@
             default: "James",
             guiOptions: {
                 type: "input-native"
+            },
+            validate: async function (answer, answers) {
+                console.log(answer);
             }
         },
         {
@@ -21,6 +34,19 @@
             default: "Bond",
             guiOptions: {
                 type: "input-fundamental"
+            },
+            validate: async function (answer, answers) {
+                console.log(answer);
+            }
+        },
+        {
+            type: "checkbox",
+            name: "citizenship",
+            message: "Your citizenship",
+            choices: ["USA", { name: "Germany", value: "Germany" }, "China", "Israel"],
+            default: ["Germany", "USA"],
+            guiOptions: {
+                type: "checkbox-fundamental"
             }
         },
         {

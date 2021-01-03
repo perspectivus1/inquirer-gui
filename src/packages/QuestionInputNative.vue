@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     onInput: utils.debounce(function(val) {
-      this.$emit("answerChanged", this.question.name, val.data);
+      this.$emit("answerChanged", this.question.name, val.target.value);
     }, 280),
     getInputType(questionType) {
       switch (questionType) {

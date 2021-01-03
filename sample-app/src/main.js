@@ -28,6 +28,17 @@ const questions0 = [
   
 const questions1 = [
   {
+    name: "firstName",
+    message: "First Name (native)",
+    default: "James",
+    guiOptions: {
+        type: "input-native"
+    },
+    validate: async function(answer, answers) {
+        console.log(answer);
+    }
+},
+{
     name: "noType",
   },
   {
