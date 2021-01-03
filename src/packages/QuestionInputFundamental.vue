@@ -16,10 +16,7 @@ export default {
     question: Object,
   },
   methods: {
-    onInput() {
-      this.$emit("answerChanged", this.question.name, this.$el.value);
-    },
-    onInputx: utils.debounce(function() {
+    onInput: utils.debounce(function() {
       this.$emit("answerChanged", this.question.name, this.$el.value);
     }, 280),
     getInputType(questionType) {
@@ -37,5 +34,5 @@ export default {
 </script>
 
 <style>
-  @import "https://unpkg.com/fundamental-styles@latest/dist/fundamental-styles.css";
+  @import "./fundamental-styles-0.14.0.css";
 </style>

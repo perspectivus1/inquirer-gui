@@ -15,8 +15,14 @@
 <inquirer-gui></inquirer-gui>
 
 <script>
-    const formElements = document.getElementsByTagName("inquirer-gui");
-    formElements[0].questions = [
+    const elements = document.getElementsByTagName("inquirer-gui");
+    const inquirerGUIElement = elements[0];
+    inquirerGUIElement.addEventListener("answered", (e) => {
+        const answers = e.detail[0];
+        // const issues = e.details[1];
+        console.log("answers", answers);
+    });
+    inquirerGUIElement.questions = [
         {
             name: "firstName",
             message: "First Name (native)",
@@ -43,8 +49,8 @@
             type: "checkbox",
             name: "citizenship",
             message: "Your citizenship",
-            choices: ["USA", { name: "Germany", value: "Germany" }, "China", "Israel"],
-            default: ["Germany", "USA"],
+            choices: ["USA", { name: "Germany", value: "DE" }, "China", "Israel"],
+            default: ["DE", "USA"],
             guiOptions: {
                 type: "checkbox-fundamental"
             }

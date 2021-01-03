@@ -23,11 +23,15 @@ The specific proposed solution is to:
 * Use [SAP Fundamental Styles](https://sap.github.io/fundamental-styles/) to render questions that should match the style of SAP Fundamental applications (rather than using Fundamental libraries for React, Vue or Angular).
 
 ## Open issues
+### Style definitions: inquirer-gui vs. consuming application
 The proposed solution would lead to multiple gui types per inquirer type. For example, we might end up with two gui types for the inquirer input type: one for vscode and one for Fundamental. A cleaner approach would be for the consuming application to apply the relevant styles on a the inquirer-gui web component.
 
 The problems with this approach is:
 1. Fundamental Styles uses classes to change component styles. This means that classes would need to be added to individual elements by the consuming application. This is possible programmatically, but not by simply using stylesheets (see [here](https://stackoverflow.com/questions/15412487/can-i-add-class-with-only-css)).
 2. Fundamental Styles uses DOM patterns for certain components (e.g. [combobox](https://sap.github.io/fundamental-styles/?path=/docs/patterns-combobox-input--cozy-and-compact)). This means that the DOM itself would be different when targeting Fundamental styles vs. vs code styles. This would make it impossible for the consuming application to control the styles by simply applying a different stylesheet.
+
+### Loading font files
+Fundamental Styles depends on components loading the SAP-icons file. However, this is [not supported in vue.js](https://forum.vuejs.org/t/web-components-fonts-and-material-icons-not-working-font-face/85816/3).
 
 ## Building
 ```sh

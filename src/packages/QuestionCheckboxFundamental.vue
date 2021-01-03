@@ -1,7 +1,4 @@
 <template>
-  <!-- 
-      :value="question.answer"
-      @change="onAnswerChanged" -->
   <fieldset class="fd-fieldset">
     <div
       class="fd-form-item"
@@ -12,6 +9,7 @@
         class="fd-checkbox fd-checkbox--compact"
         type="checkbox"
         :checked="question.answer.includes(item.value)"
+        @change="onAnswerChanged($event, item.value)"
         :id="`item-${i}`"
       />
       <label
@@ -27,17 +25,41 @@
 <script>
 export default {
   name: "QuestionCheckboxFundamental",
+  data: () => {
+    return {
+      checkedItems: [],
+    };
+  },
   props: {
     question: Object,
   },
   methods: {
-    onAnswerChanged(value) {
-      this.$emit("answerChanged", this.question.name, value);
+    onAnswerChanged(event, val) {
+      if (event.target.checked && !this.checkedItems.includes(val)) {
+        this.checkedItems.push(val);
+      } else if (!event.target.checked) {
+        const index = this.checkedItems.findIndex((value) => {
+          return value === val;
+        });
+        if (index > -1) {
+          this.checkedItems.splice(index, 1);
+        }
+      }
+
+      this.$emit("answerChanged", this.question.name, this.checkedItems);
+    },
+  },
+  watch: {
+    "question.answer": {
+      handler: function(newValue) {
+        this.checkedItems = [...newValue];
+      },
+      immediate: true,
     },
   },
 };
 </script>
 
 <style>
-  @import "https://unpkg.com/fundamental-styles@latest/dist/fundamental-styles.css";
+  @import "./fundamental-styles-0.14.0.css";
 </style>

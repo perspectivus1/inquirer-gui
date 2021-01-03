@@ -147,5 +147,5 @@ export default {
 </script>
 
 <style>
-@import "https://unpkg.com/fundamental-styles@latest/dist/fundamental-styles.css";
+  @import "./fundamental-styles-0.14.0.css";
 </style>
