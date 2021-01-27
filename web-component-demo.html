@@ -1,7 +1,21 @@
 <meta charset="utf-8">
 <title>inquirer-gui as a web component</title>
 <script src="./dist/inquirer-gui.js"></script>
+
 <style>
+@import url("./src/packages/fundamental-styles-0.14.0.css");
+
+/* the following doesn't work 
+   see: https://css-tricks.com/styling-a-web-component/
+*/
+span.question-message {
+    font-family: var(--sapFontFamily);
+}
+
+/* the following does work, but provides no granularity */
+inquirer-gui {
+    font-family: var(--sapFontFamily);
+}
 
 @font-face {
     font-family: "SAP-icons";
@@ -9,9 +23,9 @@
         format("woff");
     font-weight: normal;
     font-style: normal;
-  }
-
+}
 </style>
+
 <inquirer-gui></inquirer-gui>
 
 <script>
@@ -24,20 +38,33 @@
     });
     inquirerGUIElement.questions = [
         {
-            name: "firstName",
-            message: "First Name (native)",
-            default: "James",
+            name: "simpleInput",
+            message: "Simple input",
+            default: "Text",
             guiOptions: {
-                type: "input-native"
+                type: "input-fundamental"
             },
             validate: async function (answer, answers) {
                 console.log(answer);
             }
         },
         {
-            name: "lastName",
-            message: "Last Name (Fundamental)",
-            default: "Bond",
+            name: "numberInput",
+            type: "number",
+            message: "A number",
+            default: "35",
+            guiOptions: {
+                type: "input-fundamental"
+            },
+            validate: async function (answer, answers) {
+                console.log(answer);
+            }
+        },
+        {
+            name: "passwordInput",
+            type: "password",
+            message: "A password",
+            default: "abcd1234",
             guiOptions: {
                 type: "input-fundamental"
             },

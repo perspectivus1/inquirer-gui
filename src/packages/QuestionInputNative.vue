@@ -4,14 +4,6 @@
     :type="getInputType(question.type)"
     @input="onInput"
   />
-
-  <!-- <v-text-field
-    class="pa-0 ma-0"
-    :value="question.answer"
-    hide-details="auto"
-    outlined
-    dense
-  ></v-text-field> -->
 </template>
 
 <script>
