@@ -10,6 +10,7 @@ import QuestionInputFundamental from "./packages/QuestionInputFundamental";
 import QuestionListFundamental from "./packages/QuestionListFundamental";
 import QuestionCheckboxFundamental from "./packages/QuestionCheckboxFundamental";
 import QuestionConfirmFundamental from "./packages/QuestionConfirmFundamental";
+import QuestionEditorFundamental from "./packages/QuestionEditorFundamental";
 
 export default {
   registerBuiltinPlugins: function() {
@@ -24,6 +25,7 @@ export default {
     Vue.component('QuestionListFundamental', QuestionListFundamental);
     Vue.component('QuestionCheckboxFundamental', QuestionCheckboxFundamental);
     Vue.component('QuestionConfirmFundamental', QuestionConfirmFundamental);
+    Vue.component('QuestionEditorFundamental', QuestionEditorFundamental);
     Vue.component('QuestionInputNative', QuestionInputNative);
 
     const plugins = [
@@ -82,6 +84,10 @@ export default {
       {
         questionType: "list-fundamental",
         component: QuestionListFundamental
+      },
+      {
+        questionType: "editor-fundamental",
+        component: QuestionEditorFundamental
       },
     ];
     return plugins;

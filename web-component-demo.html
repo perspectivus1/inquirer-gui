@@ -90,7 +90,19 @@ inquirer-gui {
             guiOptions: {
                 type: "confirm-fundamental"
             }
-        },        
+        },
+        {
+            name: "editor1",
+            type: "editor",
+            message: "Multi-line input",
+            default: "Text\n2nd line",
+            guiOptions: {
+                type: "editor-fundamental"
+            },
+            validate: async function (answer, answers) {
+                console.log(answer);
+            }
+        },
         {
             name: "fruit",
             type: "list",
