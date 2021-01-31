@@ -83,6 +83,15 @@ inquirer-gui {
             }
         },
         {
+            type: "confirm",
+            name: "confirmation",
+            message: "Please confirm",
+            default: true,
+            guiOptions: {
+                type: "confirm-fundamental"
+            }
+        },        
+        {
             name: "fruit",
             type: "list",
             message: "Select a fruit (Fundamental)",
