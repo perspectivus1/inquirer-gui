@@ -1,15 +1,14 @@
 <template>
-  <ul class="fd-list fd-list--selection fd-list--compact" role="list">
+  <ul :class="getClass('ul')" role="list">
     <li
       v-for="(item, i) in question._choices"
       :key="i"
       role="listitem"
       tabindex="0"
-      class="fd-list__item"
-      v-bind:class="{'is-selected': question._choices[i].value === question.answer}"
+      :class="getClass('li', question._choices[i].value)"
       @click="onAnswerChanged(question._choices[i].value)"
     >
-      <span class="fd-list__title">{{ question._choices[i].name }}</span>
+      <span :class="getClass('text')">{{ question._choices[i].name }}</span>
     </li>
   </ul>
 </template>
@@ -18,6 +17,28 @@
 export default {
   name: "QuestionExpandFundamental",
   methods: {
+    getClass(element, value) {
+      let response = "";
+      switch (this.$root.props.theme) {
+        case "fundamental":
+          switch (element) {
+            case "ul":
+              return "fd-list fd-list--selection fd-list--compact";
+            case "li":
+              response = "fd-list__item";
+              if (value === this.question.answer) {
+                response = `${response} is-selected`;
+              }
+              return response;
+            case "text":
+              return "fd-list__title";
+            default:
+              return "";
+          }
+        default:
+          return "";
+      }
+    },
     onAnswerChanged(value) {
       this.$emit("answerChanged", this.question.name, value);
     },

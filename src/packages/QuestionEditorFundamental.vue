@@ -1,6 +1,6 @@
 <template>
   <textarea
-    class="fd-textarea fd-textarea--compact"
+    :class="getClass('textarea')"
     @input="onInput"
     v-model="question.answer"
   ></textarea>
@@ -15,6 +15,19 @@ export default {
     question: Object,
   },
   methods: {
+    getClass(element) {
+      switch (this.$root.props.theme) {
+        case "fundamental":
+          switch (element) {
+            case "textarea":
+              return "fd-textarea fd-textarea--compact";
+            default:
+              return "";
+          }
+        default:
+          return "";
+      }
+    },
     onInput: utils.debounce(function() {
       this.$emit("answerChanged", this.question.name, this.$el.value);
     }, 280),

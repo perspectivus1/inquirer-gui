@@ -1,26 +1,28 @@
 <template>
-  <div class="fd-form__group" @change="changed">
-    <div class="fd-form-item">
+  <div :class="getClass('formgroup')" @change="changed">
+    <div :class="getClass('formitem')">
       <input
         type="radio"
-        class="fd-radio fd-radio--compact"
+        :class="getClass('radio')"
         :name="question.name"
         :id="question.name + '_yes'"
         :checked="question.answer === true"
       />
-      <label class="fd-radio__label" :for="question.name + '_yes'">
+      <label
+        :class="getClass('label')"
+        :for="question.name + '_yes'">
         Yes
       </label>
     </div>
-    <div class="fd-form-item">
+    <div :class="getClass('formitem')">
       <input
         type="radio"
-        class="fd-radio fd-radio--compact"
+        :class="getClass('radio')"
         :name="question.name"
         :id="question.name + '_no'"
         :checked="question.answer === false"
       />
-      <label class="fd-radio__label" :for="question.name + '_no'">
+      <label :class="getClass('label')" :for="question.name + '_no'">
         No
       </label>
     </div>
@@ -34,6 +36,25 @@ export default {
     question: Object,
   },
   methods: {
+    getClass(element) {
+      switch (this.$root.props.theme) {
+        case "fundamental":
+          switch (element) {
+            case "radio":
+              return "fd-radio fd-radio--compact";
+            case "label":
+              return "fd-radio__label";
+            case "formgroup":
+              return "fd-form__group";
+            case "formitem":
+              return "fd-form-item";
+            default:
+              return "";
+          }
+        default:
+          return "";
+      }
+    },
     changed(e) {
       var response = (e.target.id.endsWith === "yes" ? true : false);
       this.$emit("answerChanged", this.question.name, response);

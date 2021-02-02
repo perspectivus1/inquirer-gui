@@ -43,11 +43,12 @@ const NOT_ANSWERED = "Mandatory field";
 export default {
   name: "InquirerGUI",
   props: {
-    questions: Array
+    questions: Array,
+    theme: String,
   },
   data() {
     return {
-      plugins: null
+      plugins: null,
     };
   },
   computed: {
@@ -575,7 +576,7 @@ export default {
   },
   created() {
     this.plugins = Plugins.registerBuiltinPlugins();
-  }
+  },
 };
 </script>
 

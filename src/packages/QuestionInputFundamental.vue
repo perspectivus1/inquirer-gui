@@ -1,6 +1,6 @@
 <template>
   <input
-    class="fd-input"
+    :class="getClass()"
     :value="question.answer"
     :type="getInputType(question.type)"
     @input="onInput"
@@ -16,6 +16,14 @@ export default {
     question: Object,
   },
   methods: {
+    getClass() {
+      switch (this.$root.props.theme) {
+        case "fundamental":
+          return "fd-input";
+        default:
+          return "";
+      }
+    },
     onInput: utils.debounce(function() {
       this.$emit("answerChanged", this.question.name, this.$el.value);
     }, 280),
