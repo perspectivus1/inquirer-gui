@@ -116,7 +116,9 @@ inquirer-gui {
         {
             name: "fruit",
             type: "list",
-            message: "Select a fruit (Fundamental)",
+            message: "Select a fruit",
+            choices: ["Banana", { name: "Apple", value: "APP" }, "Peach", "Pear"],
+            default: "APP",
             guiOptions: {
                 type: "list-fundamental"
             }

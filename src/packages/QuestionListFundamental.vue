@@ -2,29 +2,25 @@
   <div class="fd-popover">
     <div
       class="fd-popover__control"
-      aria-controls="amsfiaufuaskhjd"
-      aria-expanded="true"
+      :aria-controls="`${question.name}_popover`"
+      aria-expanded="false"
       aria-haspopup="true"
-      id="ansioda7dh"
-      onclick="
-                    toggleElAttrs('amsfiaufuaskhjd', ['aria-hidden']);
-                    toggleElAttrs('ansioda7dh', ['aria-expanded']);
-                    toggleElAttrs('ansid87arfgj', ['aria-expanded']);
-                "
+      :id="`${question.name}_control`"
+      @click="toggleAll()"
     >
       <div class="fd-input-group fd-input-group--control">
         <input
           type="text"
           class="fd-input fd-input-group__input"
-          id="comboboxAsFormItem"
-          placeholder="Select Fruit"
+          autocomplete="off"
+          id="input"
+          @input="onInput"
         />
         <span class="fd-input-group__addon fd-input-group__addon--button">
           <button
-            id="ansid87arfgj"
-            aria-label="show/hide fruit options"
-            aria-controls="amsfiaufuaskhjd"
-            aria-expanded="true"
+            :id="`${question.name}_button`"
+            :aria-controls="`${question.name}_popover`"
+            aria-expanded="false"
             aria-haspopup="true"
             class="fd-input-group__button fd-button fd-button--transparent"
           >
@@ -35,87 +31,67 @@
     </div>
     <div
       class="fd-popover__body fd-popover__body--no-arrow fd-popover__body--dropdown fd-popover__body--dropdown-fill"
-      aria-hidden="false"
-      id="amsfiaufuaskhjd"
+      aria-hidden="true"
+      :id="`${question.name}_popover`"
     >
       <div class="fd-popover__wrapper docs-max-height">
         <ul
           aria-label="fruit options"
-          class="fd-list fd-list--dropdown"
+          class="fd-list fd-list--dropdown fd-list--compact"
           role="listbox"
         >
-          <li role="option" tabindex="0" class="fd-list__item is-selected">
-            <span class="fd-list__title">
-              <span class="fd-list__bold">App</span>le
-            </span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Orange</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Banana</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Kiwi</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Nectarine</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Apricots</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Peache</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Plum</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Mango</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Strawberry</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Blueberry</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Watermelon</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Rockmelon</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Honeydew</span>
-          </li>
-          <li role="option" tabindex="0" class="fd-list__item">
-            <span class="fd-list__title">Apple</span>
+          <li
+            v-for="(item, i) in relevantChoices"
+            :key="i"
+            role="option"
+            tabindex="0"
+            class="fd-list__item"
+            @click="onClicked(item)"
+          >
+            <span class="fd-list__title">{{ item.name }}</span>
           </li>
         </ul>
       </div>
     </div>
   </div>
-  <!-- :value="question.answer"
-    @change="onAnswerChanged"
-    :items="this.question._choices"
-    item-text="name"
-    item-value="value"
-    hide-details="auto"
-    :label="clickToDisplay"
-    :append-icon="'mdi-chevron-down'"
-    :search-input.sync="searchInput"
--->
 </template>
 
 <script>
 export default {
   name: "QuestionListFundamental",
   methods: {
-    onAnswerChanged(value) {
-      this.$emit("answerChanged", this.question.name, value);
+    onClicked(item) {
+      let input = this.$el.querySelector("#input");
+      if (input) {
+        input.value = item.name;
+      }
+
+      this.toggleElAttrs(`${this.question.name}_popover`, ["aria-hidden"]);
+      this.$emit("answerChanged", this.question.name, item.value);
+    },
+    onInput(e) {
+      this.setElAttr(`${this.question.name}_popover`, "aria-hidden", "false");
+      this.filter = e.srcElement.value;
+    },
+    getAnswerName() {
+      const value = this.question.answer;
+      const choice = this.question._choices.find((item) => {
+        return (item.value === value);
+      });
+      if (choice) {
+        return choice.name;
+      }
+      return "";
+    },
+    toggleAll() {
+      this.toggleElAttrs(`${this.question.name}_control`, ["aria-expanded"]);
+      this.toggleElAttrs(`${this.question.name}_button`, ["aria-expanded"]);
+      this.toggleElAttrs(`${this.question.name}_popover`, ["aria-hidden"]);
     },
     toggleElAttrs(id, toggleAttrs) {
-      let ref = document.getElementById(id);
+      // this doesn't work for web components shadow DOM
+      // let ref = document.getElementById(id);
+      let ref = this.$el.querySelector(`#${id}`);
       if (ref && Array.isArray(toggleAttrs) && toggleAttrs.length) {
         for (var i = 0; i < toggleAttrs.length; i++) {
           var val = ref.getAttribute(toggleAttrs[i]);
@@ -128,14 +104,27 @@ export default {
       }
     },
     setElAttr(id, attr, value) {
-      let ref = document.getElementById(id);
+      let ref = this.$el.querySelector(`#${id}`);
       if (ref && attr && value) {
         ref.setAttribute(attr, value);
       }
     },
   },
+  computed: {
+    relevantChoices: function() {
+      if (this.filter === "") {
+        return this.question._choices;
+      }
+
+      const response = this.question._choices.filter((item) => {
+        return item.name.toLowerCase().includes(this.filter.toLowerCase());
+      });
+      return response;
+    }
+  },
   data() {
     return {
+      filter: "",
       searchInput: null,
       clickToDisplay: "Click to display the list of options",
     };
@@ -143,9 +132,28 @@ export default {
   props: {
     question: Object,
   },
+  watch: {
+    "question.answer": {
+      handler: function() {
+        this.filter = "";
+        if (this.$el) {
+          let input = this.$el.querySelector("#input");
+          if (input) {
+            input.value = this.getAnswerName();
+          }
+        }
+      },
+    },
+  },
+  mounted() {
+    let input = this.$el.querySelector("#input");
+    if (input) {
+      input.value = this.getAnswerName();
+    }
+  }
 };
 </script>
 
 <style>
-  @import "./fundamental-styles-0.14.0.css";
+@import "./fundamental-styles-0.14.0.css";
 </style>
