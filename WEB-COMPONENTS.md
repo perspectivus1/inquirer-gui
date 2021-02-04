@@ -19,19 +19,16 @@ The specific proposed solution is to:
 * Maintain Inquirer GUI as a Vue application.
 * Provide Inquirer GUI as a Web Component (see how to [build Vue applications as Web Components](https://cli.vuejs.org/guide/build-targets.html#web-component)).
 * Remove dependencies on Vuetify. Note that Vue applications that use [Vuetify cannot be packaged as Web Components](https://github.com/vuetifyjs/vuetify/issues/5054).
-* Create custom question gui types ([Inquirer GUI plugins](https://github.com/SAP/inquirer-gui/blob/master/PLUGINS.md)) for different target styling requirements.
-* Use [SAP Fundamental Styles](https://sap.github.io/fundamental-styles/) to render questions that should match the style of SAP Fundamental applications (rather than using Fundamental libraries for React, Vue or Angular).
+* Use [SAP Fundamental Styles](https://sap.github.io/fundamental-styles/) as the basis for rendering all built-in question types. This means we do *not* use Fundamental libraries for React, Vue or Angular.
+* Inquirer-gui gui types ([Inquirer GUI plugins](https://github.com/SAP/inquirer-gui/blob/master/PLUGINS.md)) can be used to custom render form controls.
 
 ## Open issues
-### Style definitions: inquirer-gui vs. consuming application
-The proposed solution would lead to multiple gui types per inquirer type. For example, we might end up with two gui types for the inquirer input type: one for vscode and one for Fundamental. A cleaner approach would be for the consuming application to apply the relevant styles on a the inquirer-gui web component.
+The problem with using Fundamental Styles is:
 
-The problems with this approach is:
-1. Fundamental Styles uses classes to change component styles. This means that classes would need to be added to individual elements by the consuming application. This is possible programmatically, but not by simply using stylesheets (see [here](https://stackoverflow.com/questions/15412487/can-i-add-class-with-only-css)).
-2. Fundamental Styles uses DOM patterns for certain components (e.g. [combobox](https://sap.github.io/fundamental-styles/?path=/docs/patterns-combobox-input--cozy-and-compact)). This means that the DOM itself would be different when targeting Fundamental styles vs. vs code styles. This would make it impossible for the consuming application to control the styles by simply applying a different stylesheet.
+Fundamental Styles uses DOM patterns for certain components (e.g. [combobox](https://sap.github.io/fundamental-styles/?path=/docs/patterns-combobox-input--cozy-and-compact)). If that pattern changes, the respective controls for a specific UI Framework would automatically update, but inquirer-gui would have to make the necessary ajustments.
 
 ### Loading font files
-Fundamental Styles depends on components loading the SAP-icons file. However, this is [not supported in vue.js](https://forum.vuejs.org/t/web-components-fonts-and-material-icons-not-working-font-face/85816/3).
+Font files cannot be loaded from within a web component, so the consuming application must do this (required for check marks inside checkboxes and down arrows in comboboxes).
 
 ## Building
 ```sh
@@ -41,4 +38,15 @@ npm run build-wc
 The web component is placed under `/dist`.
 
 ## Running
-Open the `web-component-demo.html` file in a web browser
+Open the `sample-web-components/web-component-demo.html` file in a web browser.
+
+To run the sample in dark theme:
+
+Navigate to `sample-web-components/web-component-demo.html#dark`.
+
+## Themes
+* We define business themes. E.g. VS Code vs. Fundamental
+* And color theme. E.g. Fundamental **Dark** vs. VS Code **Light**
+* Inquirer-gui uses Fundamental classes that are defined in the Fundamental Styles css.
+* We use css variables to apply a theme, as this is the way we can affect the look of the shadow DOM of a web component from within the consuming application. To apply a theme, the consuming application imports a css that defines the css variables used by Fundamnetal.
+* [Article](https://levelup.gitconnected.com/css-variables-and-web-components-7aaae8d4c6ab)

@@ -581,7 +581,15 @@ export default {
 </script>
 
 <style>
+@import "./fundamental-styles-0.14.0.css";
+
+.inquirer-gui {
+  background-color: var(--sapBackgroundColor, #f7f7f7);
+  font-family: var(--sapFontFamily,"72","72full",Arial,Helvetica,sans-serif);
+}
+
 .inquirer-gui p.question-label {
+  color: var(--sapTextColor);
   margin-top: 0.6rem;
   margin-bottom: 0.05rem;
 }
@@ -615,12 +623,12 @@ export default {
   padding-left: 4px;
 }
 
-  @font-face {
+  /* @font-face {
     font-family: "SAP-icons";
     src: url("https://cdn.jsdelivr.net/npm/@sap-theming/theming-base-content@11.1.24/content/Base/baseLib/sap_fiori_3/fonts/SAP-icons.woff")
         format("woff");
     font-weight: normal;
     font-style: normal;
   }
-
+ */
 </style>

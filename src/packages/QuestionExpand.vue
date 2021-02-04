@@ -1,57 +1,59 @@
 <template>
-<v-card
-  outlined
-  tile
->
-  <v-list
-    dense
-    subheader
-  >
-    <v-list-item-group
-      ref="itemsGroup"
-      :value="question.answer"
-      @change="onAnswerChanged"
+  <ul class="fd-list fd-list--selection fd-list--compact" role="list">
+    <li
+      v-for="(item, i) in question._choices"
+      :key="i"
+      role="listitem"
+      tabindex="0"
+      class="fd-list__item"
+      :class="getClass(question._choices[i].value)"
+      @click="onAnswerChanged(question._choices[i].value)"
     >
-      <template v-for="(item, i) in question._choices">
-        <v-divider
-            v-if="item.type === 'separator'"
-            :key="`divider-${i}`"
-          ></v-divider>
-        <v-list-item
-            v-else
-            :key="`item-${i}`"
-            :value="item.value"
-        >
-          <template v-slot:default="{ active, toggle }">
-              <v-list-item-content>
-                <v-list-item-title v-text="item.name"></v-list-item-title>
-              </v-list-item-content>
-            </template>
-          </v-list-item>
-        </template>
-    </v-list-item-group>
-  </v-list>
-</v-card>
-
+      <span class="fd-list__title">{{ question._choices[i].name }}</span>
+    </li>
+  </ul>
 </template>
 
 <script>
-// TODO: Support separators
 export default {
   name: "QuestionExpand",
-  props: {
-    question: Object
-  },
   methods: {
+    getClass(value) {
+      if (value === this.question.answer) {
+        return "is-selected";
+      }
+    },
     onAnswerChanged(value) {
       this.$emit("answerChanged", this.question.name, value);
-    }
-  }
+    },
+    toggleElAttrs(id, toggleAttrs) {
+      let ref = document.getElementById(id);
+      if (ref && Array.isArray(toggleAttrs) && toggleAttrs.length) {
+        for (var i = 0; i < toggleAttrs.length; i++) {
+          var val = ref.getAttribute(toggleAttrs[i]);
+          if (val === "true") {
+            this.setElAttr(id, toggleAttrs[i], "false");
+          } else if (val === "false") {
+            this.setElAttr(id, toggleAttrs[i], "true");
+          }
+        }
+      }
+    },
+    setElAttr(id, attr, value) {
+      let ref = document.getElementById(id);
+      if (ref && attr && value) {
+        ref.setAttribute(attr, value);
+      }
+    },
+  },
+  data() {
+    return {
+      searchInput: null,
+      clickToDisplay: "Click to display the list of options",
+    };
+  },
+  props: {
+    question: Object,
+  },
 };
 </script>
-
-<style>
-.v-messages {
-  min-height: 0px;
-}
-</style>

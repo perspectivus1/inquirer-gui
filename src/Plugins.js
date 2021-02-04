@@ -5,13 +5,6 @@ import QuestionList from "./packages/QuestionList";
 import QuestionConfirm from "./packages/QuestionConfirm";
 import QuestionCheckbox from "./packages/QuestionCheckbox";
 import QuestionExpand from "./packages/QuestionExpand";
-import QuestionInputNative from "./packages/QuestionInputNative";
-import QuestionInputFundamental from "./packages/QuestionInputFundamental";
-import QuestionListFundamental from "./packages/QuestionListFundamental";
-import QuestionCheckboxFundamental from "./packages/QuestionCheckboxFundamental";
-import QuestionConfirmFundamental from "./packages/QuestionConfirmFundamental";
-import QuestionEditorFundamental from "./packages/QuestionEditorFundamental";
-import QuestionExpandFundamental from "./packages/QuestionExpandFundamental";
 
 export default {
   registerBuiltinPlugins: function() {
@@ -22,13 +15,6 @@ export default {
     Vue.component('QuestionConfirm', QuestionConfirm);
     Vue.component('QuestionCheckbox', QuestionCheckbox);
     Vue.component('QuestionExpand', QuestionExpand);
-    Vue.component('QuestionInputFundamental', QuestionInputFundamental);
-    Vue.component('QuestionListFundamental', QuestionListFundamental);
-    Vue.component('QuestionCheckboxFundamental', QuestionCheckboxFundamental);
-    Vue.component('QuestionConfirmFundamental', QuestionConfirmFundamental);
-    Vue.component('QuestionEditorFundamental', QuestionEditorFundamental);
-    Vue.component('QuestionExpandFundamental', QuestionExpandFundamental);
-    Vue.component('QuestionInputNative', QuestionInputNative);
 
     const plugins = [
       {
@@ -66,34 +52,6 @@ export default {
       {
         questionType: "expand",
         component: QuestionExpand
-      },
-      {
-        questionType: "input-native",
-        component: QuestionInputNative
-      },
-      {
-        questionType: "input-fundamental",
-        component: QuestionInputFundamental
-      },
-      {
-        questionType: "checkbox-fundamental",
-        component: QuestionCheckboxFundamental
-      },
-      {
-        questionType: "confirm-fundamental",
-        component: QuestionConfirmFundamental
-      },
-      {
-        questionType: "list-fundamental",
-        component: QuestionListFundamental
-      },
-      {
-        questionType: "editor-fundamental",
-        component: QuestionEditorFundamental
-      },
-      {
-        questionType: "expand-fundamental",
-        component: QuestionExpandFundamental
       },
     ];
     return plugins;

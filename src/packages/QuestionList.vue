@@ -1,72 +1,155 @@
 <template>
-  <v-autocomplete
-    :value="question.answer"
-    @change="onAnswerChanged"
-    :items="this.question._choices"
-    item-text="name"
-    item-value="value"
-    hide-details="auto"
-    :label="clickToDisplay"
-    single-line
-    :append-icon="'mdi-chevron-down'"
-    :search-input.sync="searchInput"
-    outlined
-    dense
-  >
-    <template v-slot:item="{ item, attrs, on }">
-      <v-list-item :disabled="item.type==='separator'" v-bind="attrs" v-on="on">
-        <v-divider v-if="getDividerType(item)==='divider'"></v-divider>
-        <v-subheader v-else-if="getDividerType(item)==='header'">{{stripEscapeChars(item.line)}}</v-subheader>
-        <v-list-item-content v-else>
-          <v-list-item-title :id="attrs['aria-labelledby']" v-text="item.name"></v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </template>
-  </v-autocomplete>
+  <div class="fd-popover">
+    <div
+      class="fd-popover__control"
+      :aria-controls="`${question.name}_popover`"
+      aria-expanded="false"
+      aria-haspopup="true"
+      :id="`${question.name}_control`"
+      @click="toggleAll()"
+    >
+      <div class="fd-input-group fd-input-group--control">
+        <input
+          type="text"
+          class="fd-input fd-input-group__input"
+          autocomplete="off"
+          id="input"
+          @input="onInput"
+        />
+        <span class="fd-input-group__addon fd-input-group__addon--button">
+          <button
+            :id="`${question.name}_button`"
+            :aria-controls="`${question.name}_popover`"
+            aria-expanded="false"
+            aria-haspopup="true"
+            class="fd-input-group__button fd-button fd-button--transparent"
+          >
+            <i class="sap-icon--navigation-down-arrow"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+    <div
+      class="fd-popover__body fd-popover__body--no-arrow fd-popover__body--dropdown fd-popover__body--dropdown-fill"
+      aria-hidden="true"
+      :id="`${question.name}_popover`"
+    >
+      <div class="fd-popover__wrapper docs-max-height">
+        <ul
+          aria-label="fruit options"
+          class="fd-list fd-list--dropdown fd-list--compact"
+          role="listbox"
+        >
+          <li
+            v-for="(item, i) in relevantChoices"
+            :key="i"
+            role="option"
+            tabindex="0"
+            class="fd-list__item"
+            @click="onClicked(item)"
+          >
+            <span class="fd-list__title">{{ item.name }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-const stripAnsi = require("strip-ansi");
-// TODO: Get Inquirer.Separator() as props. (Inquirer Issue: https://github.com/SBoudrias/Inquirer.js/issues/543)
-const Inquirer_Default_Separator = '\u001b[2m──────────────\u001b[22m';
-
 export default {
   name: "QuestionList",
   methods: {
-    onAnswerChanged(value) {
-      this.$emit("answerChanged", this.question.name, value);
-    },
-    getDividerType(item) {
-      let type = undefined;
-      if (item.type==='separator') {
-        type = (item.line === Inquirer_Default_Separator || item.line === this.stripEscapeChars(Inquirer_Default_Separator)) ? "divider" : "header";
+    onClicked(item) {
+      let input = this.$el.querySelector("#input");
+      if (input) {
+        input.value = item.name;
       }
-      return type ;
+
+      this.toggleElAttrs(`${this.question.name}_popover`, ["aria-hidden"]);
+      this.$emit("answerChanged", this.question.name, item.value);
     },
-    stripEscapeChars(value) {
-      return stripAnsi(value);
+    onInput(e) {
+      this.setElAttr(`${this.question.name}_popover`, "aria-hidden", "false");
+      this.filter = e.srcElement.value;
+    },
+    getAnswerName() {
+      const value = this.question.answer;
+      const choice = this.question._choices.find((item) => {
+        return (item.value === value);
+      });
+      if (choice) {
+        return choice.name;
+      }
+      return "";
+    },
+    toggleAll() {
+      this.toggleElAttrs(`${this.question.name}_control`, ["aria-expanded"]);
+      this.toggleElAttrs(`${this.question.name}_button`, ["aria-expanded"]);
+      this.toggleElAttrs(`${this.question.name}_popover`, ["aria-hidden"]);
+    },
+    toggleElAttrs(id, toggleAttrs) {
+      // this doesn't work for web components shadow DOM
+      // let ref = document.getElementById(id);
+      let ref = this.$el.querySelector(`#${id}`);
+      if (ref && Array.isArray(toggleAttrs) && toggleAttrs.length) {
+        for (var i = 0; i < toggleAttrs.length; i++) {
+          var val = ref.getAttribute(toggleAttrs[i]);
+          if (val === "true") {
+            this.setElAttr(id, toggleAttrs[i], "false");
+          } else if (val === "false") {
+            this.setElAttr(id, toggleAttrs[i], "true");
+          }
+        }
+      }
+    },
+    setElAttr(id, attr, value) {
+      let ref = this.$el.querySelector(`#${id}`);
+      if (ref && attr && value) {
+        ref.setAttribute(attr, value);
+      }
+    },
+  },
+  computed: {
+    relevantChoices: function() {
+      if (this.filter === "") {
+        return this.question._choices;
+      }
+
+      const response = this.question._choices.filter((item) => {
+        return item.name.toLowerCase().includes(this.filter.toLowerCase());
+      });
+      return response;
     }
   },
   data() {
     return {
+      filter: "",
       searchInput: null,
-      clickToDisplay: "Click to display the list of options"
-    }
+      clickToDisplay: "Click to display the list of options",
+    };
   },
   props: {
-    question: Object
+    question: Object,
+  },
+  watch: {
+    "question.answer": {
+      handler: function() {
+        this.filter = "";
+        if (this.$el) {
+          let input = this.$el.querySelector("#input");
+          if (input) {
+            input.value = this.getAnswerName();
+          }
+        }
+      },
+    },
+  },
+  mounted() {
+    let input = this.$el.querySelector("#input");
+    if (input) {
+      input.value = this.getAnswerName();
+    }
   }
 };
 </script>
-
-<style scoped>
-.list-group {
-  margin-bottom: 15px;
-}
-.list-group-item:hover {
-  cursor: pointer;
-}
-.v-list-item .v-subheader {
-  padding: 8px 0 8px 0;
-}
-</style>

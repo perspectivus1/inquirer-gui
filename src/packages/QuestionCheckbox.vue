@@ -1,64 +1,61 @@
 <template>
-<v-card
-  outlined
-  tile
->
-  <v-list
-    dense
-    subheader
-  >
-    <v-list-item-group
-      multiple
-      ref="itemsGroup"
-      :value="question.answer"
-      @change="onAnswerChanged"
+  <fieldset class="fd-fieldset">
+    <div
+      class="fd-form-item"
+      v-for="(item, i) in question._choices"
+      :key="`item-${i}`"
     >
-      <template v-for="(item, i) in question._choices">
-        <v-divider
-            v-if="item.type === 'separator'"
-            :key="`divider-${i}`"
-          ></v-divider>
-        <v-list-item
-            v-else
-            :key="`item-${i}`"
-            :value="item.value"
-        >
-          <template v-slot:default="{ active }">
-              <v-list-item-action>
-                <v-checkbox
-                  dense
-                  :input-value="active"
-                  :true-value="item.value"
-                ></v-checkbox>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.name"></v-list-item-title>
-              </v-list-item-content>
-            </template>
-          </v-list-item>
-        </template>
-    </v-list-item-group>
-  </v-list>
-</v-card>
-
+      <input
+        class="fd-checkbox fd-checkbox--compact"
+        type="checkbox"
+        :checked="question.answer.includes(item.value)"
+        @change="onAnswerChanged($event, item.value)"
+        :id="`item-${i}`"
+      />
+      <label
+        class="fd-checkbox__label fd-checkbox__label--compact"
+        :for="`item-${i}`"
+      >
+        <span class="fd-checkbox__text">{{ item.name }}</span>
+      </label>
+    </div>
+  </fieldset>
 </template>
 
 <script>
 export default {
   name: "QuestionCheckbox",
+  data: () => {
+    return {
+      checkedItems: [],
+    };
+  },
   props: {
-    question: Object
+    question: Object,
   },
   methods: {
-    onAnswerChanged(value) {
-      this.$emit("answerChanged", this.question.name, value);
-    }
-  }
+    onAnswerChanged(event, val) {
+      if (event.target.checked && !this.checkedItems.includes(val)) {
+        this.checkedItems.push(val);
+      } else if (!event.target.checked) {
+        const index = this.checkedItems.findIndex((value) => {
+          return value === val;
+        });
+        if (index > -1) {
+          this.checkedItems.splice(index, 1);
+        }
+      }
+
+      this.$emit("answerChanged", this.question.name, this.checkedItems);
+    },
+  },
+  watch: {
+    "question.answer": {
+      handler: function(newValue) {
+        this.checkedItems = [...newValue];
+      },
+      immediate: true,
+    },
+  },
 };
 </script>
-
-<style>
-.v-messages {
-  min-height: 0px;
-}
-</style>

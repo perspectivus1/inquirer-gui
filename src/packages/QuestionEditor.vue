@@ -1,13 +1,9 @@
 <template>
-  <v-textarea
+  <textarea
+    class="fd-textarea fd-textarea--compact"
     @input="onInput"
-    :value="question.answer"
-    aria-describedby="validation-message"
-    hide-details="auto"
-    rows=7
-    dense
-    outlined
-  ></v-textarea>
+    v-model="question.answer"
+  ></textarea>
 </template>
 
 <script>
@@ -16,12 +12,12 @@ import utils from "../utils";
 export default {
   name: "QuestionEditor",
   props: {
-    question: Object
+    question: Object,
   },
   methods: {
-    onInput: utils.debounce(function(val) {
-      this.$emit("answerChanged", this.question.name, val);
-    }, 280)
-  }
+    onInput: utils.debounce(function() {
+      this.$emit("answerChanged", this.question.name, this.$el.value);
+    }, 280),
+  },
 };
 </script>

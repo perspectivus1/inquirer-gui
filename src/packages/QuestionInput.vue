@@ -1,13 +1,10 @@
 <template>
-  <v-text-field
-    @input="onInput"
+  <input
+    class="fd-input"
     :value="question.answer"
-    class="pa-0 ma-0"
     :type="getInputType(question.type)"
-    hide-details="auto"
-    outlined
-    dense
-  ></v-text-field>
+    @input="onInput"
+  />
 </template>
 
 <script>
@@ -16,11 +13,11 @@ import utils from "../utils";
 export default {
   name: "QuestionInput",
   props: {
-    question: Object
+    question: Object,
   },
   methods: {
-    onInput: utils.debounce(function(val) {
-      this.$emit("answerChanged", this.question.name, val);
+    onInput: utils.debounce(function() {
+      this.$emit("answerChanged", this.question.name, this.$el.value);
     }, 280),
     getInputType(questionType) {
       switch (questionType) {
@@ -31,18 +28,7 @@ export default {
         case "input":
           return "text";
       }
-    }
-  }
+    },
+  },
 };
 </script>
-
-<style>
-.v-input {
-  margin: 0;
-  padding: 0px;
-}
-
-.col {
-  padding-bottom: 0px;
-}
-</style>
