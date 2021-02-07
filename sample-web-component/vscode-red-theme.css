@@ -1,0 +1,15 @@
+:root {
+  --vscode-font-family: "Arial, Helvetica, sans-serif";
+  --vscode-editor-background: #390000;
+  --vscode-foreground: #cccccc;
+  --vscode-font-size: 1rem;
+  --vscode-button-background: #0e639c;
+  --vscode-button-background: #0e639c;
+  --vscode-button-hoverBackground: #1177bb;
+  --vscode-button-hoverBackground: #1177bb;
+  --vscode-input-background: #580000;
+  --vscode-input-foreground: #cccccc;
+  --vscode-panel-border: rgba(128, 128, 128, 0.35);
+  --vscode-dropdown-background: #580000;
+  --vscode-list-hoverBackground: #800000;
+}

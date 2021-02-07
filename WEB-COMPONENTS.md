@@ -22,6 +22,13 @@ The specific proposed solution is to:
 * Use [SAP Fundamental Styles](https://sap.github.io/fundamental-styles/) as the basis for rendering all built-in question types. This means we do *not* use Fundamental libraries for React, Vue or Angular.
 * Inquirer-gui gui types ([Inquirer GUI plugins](https://github.com/SAP/inquirer-gui/blob/master/PLUGINS.md)) can be used to custom render form controls.
 
+## Themes
+* We define business themes. E.g. VS Code vs. Fundamental
+* And color theme. E.g. Fundamental **Dark** vs. VS Code **Light**
+* Inquirer-gui uses Fundamental classes that are defined in the Fundamental Styles css.
+* We use css variables to apply a theme, as this is the way we can affect the look of the shadow DOM of a web component from within the consuming application. To apply a theme, the consuming application imports a css that defines the css variables used by Fundamnetal.
+* [Article](https://levelup.gitconnected.com/css-variables-and-web-components-7aaae8d4c6ab)
+
 ## Open issues
 The problem with using Fundamental Styles is:
 
@@ -37,16 +44,7 @@ npm run build-wc
 
 The web component is placed under `/dist`.
 
-## Running
-Open the `sample-web-components/web-component-demo.html` file in a web browser.
-
-To run the sample in dark theme:
-
-Navigate to `sample-web-components/web-component-demo.html#dark`.
-
-## Themes
-* We define business themes. E.g. VS Code vs. Fundamental
-* And color theme. E.g. Fundamental **Dark** vs. VS Code **Light**
-* Inquirer-gui uses Fundamental classes that are defined in the Fundamental Styles css.
-* We use css variables to apply a theme, as this is the way we can affect the look of the shadow DOM of a web component from within the consuming application. To apply a theme, the consuming application imports a css that defines the css variables used by Fundamnetal.
-* [Article](https://levelup.gitconnected.com/css-variables-and-web-components-7aaae8d4c6ab)
+## Sample Apps
+We provide two sample apps:
+* [Web component](./sample-web-component/README.md)
+* [Web component using RPC](./sample-web-component-rpc/README.md)

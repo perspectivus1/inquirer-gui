@@ -1,5 +1,5 @@
 # Inquirer-gui as Web Component using WebSocket RPC
-In this example, simple web application renders inquirer-gui as a web component. It communicates with a WebSocket server via RPC to retrieve a list of inquirer.js questions and to evaluate question methods (e.g. `evaluate()`).
+In this example, a simple web application renders inquirer-gui as a web component. It communicates with a WebSocket server via RPC to retrieve a list of inquirer.js questions and to evaluate question methods (e.g. `evaluate()`).
 
 ## Setup
 ```sh

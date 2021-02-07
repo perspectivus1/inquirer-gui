@@ -20,20 +20,53 @@
         applyTheme();
         window.addEventListener("hashchange", applyTheme, false);
 
-        function applyTheme() {
-            if (window.location.hash === "#dark") {
-                const darkLink = document.createElement("link");
-                darkLink.setAttribute("id", "darkLink");
-                darkLink.setAttribute("rel", "stylesheet");
-                darkLink.setAttribute("type", "text/css");
-                darkLink.setAttribute("href", "fundamental-dark-theme.css");
-                document.getElementsByTagName("head")[0].appendChild(darkLink);
-            } else {
-                const darkLink = document.getElementById("darkLink");
-                if (darkLink) {
-                    darkLink.remove();
-                }
+        function removeTheme() {
+            const themeLinks = document.querySelectorAll(".theme");
+            for (themeLink of themeLinks) {
+                themeLink.remove();
             }
+        }
+
+        function applyVscodeTheme(theme) {
+            let link;
+            removeTheme();
+            link = document.createElement("link");
+            link.setAttribute("class", "theme");
+            link.setAttribute("rel", "stylesheet");
+            link.setAttribute("type", "text/css");
+            link.setAttribute("href", "vscode-theme.css");
+            document.getElementsByTagName("head")[0].appendChild(link);
+
+            link = document.createElement("link");
+            link.setAttribute("class", "theme");
+            link.setAttribute("rel", "stylesheet");
+            link.setAttribute("type", "text/css");
+            link.setAttribute("href", `${theme}-theme.css`);
+            document.getElementsByTagName("head")[0].appendChild(link);
+        }
+
+        function applyTheme() {
+            let link;
+            switch (window.location.hash) {
+                case "#dark":
+                    removeTheme();
+                    link = document.createElement("link");
+                    link.setAttribute("class", "theme");
+                    link.setAttribute("rel", "stylesheet");
+                    link.setAttribute("type", "text/css");
+                    link.setAttribute("href", "fundamental-dark-theme.css");
+                    document.getElementsByTagName("head")[0].appendChild(link);
+                    break;
+                case "#vscode-dark":
+                    applyVscodeTheme("vscode-dark");
+                    break;
+                case "#vscode-red":
+                    applyVscodeTheme("vscode-red");
+                    break;
+                default:
+                    removeTheme();
+            }
+
         }
         function getQuestions() {
             return [
