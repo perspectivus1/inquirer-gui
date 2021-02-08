@@ -312,7 +312,7 @@
   --sapField_HelpBackground: #29313a;
   --sapField_BorderWidth: 0;
   --sapField_BorderCornerRadius: 0;
-  --sapField_Hover_Background: #29313a;
+  --sapField_Hover_Background: var(--vscode-input-background);
   --sapField_Hover_BorderColor: #91c8f6;
   --sapField_Hover_HelpBackground: #062e4f;
   --sapField_Active_BorderColor: #91c8f6;
@@ -344,14 +344,14 @@
   --sapList_HeaderBackground: #232931;
   --sapList_HeaderBorderColor: #3a4552;
   --sapList_HeaderTextColor: #fafafa;
-  --sapList_BorderColor: #3a4552;
+  --sapList_BorderColor: none;
   --sapList_TextColor: #fafafa;
   --sapList_Active_TextColor: #29313a;
   --sapList_BorderWidth: .0625rem;
   --sapList_Active_Background: #91c8f6;
-  --sapList_SelectionBackgroundColor: #344b5f;
-  --sapList_SelectionBorderColor: #91c8f6;
-  --sapList_Hover_SelectionBackground: #395369;
+  --sapList_SelectionBackgroundColor: var(--vscode-list-selectionBackground, #344b5f);
+  --sapList_SelectionBorderColor: none;
+  --sapList_Hover_SelectionBackground: var(--vscode-list-selectionBackground, #395369);
   --sapList_Background: var(--vscode-dropdown-background, #3c3c3c);
   --sapList_Hover_Background: var(--vscode-list-hoverBackground, #2f3943);
   --sapList_AlternatingBackground: #2d3640;

@@ -13,4 +13,6 @@
   --vscode-dropdown-background: #580000;
   --vscode-list-hoverBackground: #800000;
   --vscode-focusBorder: rgba(255, 102, 102, 0.67);
+  --vscode-menu-selectionBackground: #880000;
+  --vscode-list-selectionBackground: #880000;
 }
