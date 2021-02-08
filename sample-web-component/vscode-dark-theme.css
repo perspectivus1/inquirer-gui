@@ -12,4 +12,5 @@
   --vscode-panel-border: #cecece;
   --vscode-dropdown-background: #3c3c3c;
   --vscode-list-hoverBackground: #2f3943;
+  --vscode-focusBorder: rgba(14, 99, 156, 0.8);
 }
