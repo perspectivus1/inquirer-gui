@@ -44,7 +44,6 @@ export default {
   name: "InquirerGUI",
   props: {
     questions: Array,
-    theme: String,
   },
   data() {
     return {
@@ -609,6 +608,7 @@ export default {
 /* mandatory asterisk div */
 .mandatory-asterisk {
   padding-left: 4px;
+  color: #ff5252;
 }
 
 /* Error validation text div */

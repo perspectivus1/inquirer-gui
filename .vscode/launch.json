@@ -5,6 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}/sample-web-components-vscode-extension"
+            ],
+            "name": "Launch Extension",
+            "outFiles": [
+                "${workspaceFolder}/sample-web-components-vscode-extension/out/**/*.js"
+            ],
+            "request": "launch",
+            "type": "pwa-extensionHost"
+        },
+        {
             "name": "Launch Chrome",
             "request": "launch",
             "type": "pwa-chrome",
