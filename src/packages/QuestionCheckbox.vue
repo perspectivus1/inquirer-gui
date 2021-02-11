@@ -6,7 +6,8 @@
       :key="`item-${i}`"
     >
       <input
-        class="fd-checkbox fd-checkbox--compact"
+        class="fd-checkbox"
+        :class="checkboxSizeClass"
         type="checkbox"
         :checked="question.answer.includes(item.value)"
         @change="onAnswerChanged($event, item.value)"
@@ -28,6 +29,7 @@ export default {
   data: () => {
     return {
       checkedItems: [],
+      checkboxSizeClass: "fd-checkbox--compact",
     };
   },
   props: {
@@ -48,6 +50,55 @@ export default {
 
       this.$emit("answerChanged", this.question.name, this.checkedItems);
     },
+    appplyCheckboxSize() {
+      const style = window.getComputedStyle(window.document.body);
+      const checkBoxSize = style.getPropertyValue("--inquirerGuiCheckboxSize");
+      switch (checkBoxSize.trim()) {
+        case "large":
+          this.checkboxSizeClass = "";
+          break;
+        default:
+          this.checkboxSizeClass = "fd-checkbox--compact";
+          break;
+      }
+    },
+    listenToLoadedLinks(linkNodes) {
+      const loadedCallback = () => {
+        this.appplyCheckboxSize();
+      };
+
+      for (const linkNode of linkNodes) {
+        linkNode.addEventListener("load", loadedCallback);
+      }
+    },
+    initObserver() {
+      const targetNode = window.document;
+
+      // Options for the observer (which mutations to observe)
+      const config = {
+        childList: true,
+        subtree: true,
+      };
+
+      // Callback function to execute when mutations are observed
+      const callback = (mutationsList) => {
+        for (const mutation of mutationsList) {
+          if (mutation.addedNodes) {
+            this.listenToLoadedLinks(mutation.addedNodes);
+          }
+
+          if (mutation.removedNodes) {
+            this.appplyCheckboxSize();
+          }
+        }
+      };
+
+      // Create an observer instance linked to the callback function
+      const observer = new MutationObserver(callback);
+
+      // Start observing the target node for configured mutations
+      observer.observe(targetNode, config);
+    },
   },
   watch: {
     "question.answer": {
@@ -56,6 +107,11 @@ export default {
       },
       immediate: true,
     },
+  },
+  mounted() {
+    const linkNodes = window.document.getElementsByTagName("link");
+    this.listenToLoadedLinks(linkNodes);
+    this.initObserver();
   },
 };
 </script>

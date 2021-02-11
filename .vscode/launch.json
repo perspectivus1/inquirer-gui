@@ -5,12 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch WebSocket server",
+            "program": "${workspaceFolder}/websocket-server/src/index.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
+        },
+        {
             "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}/sample-web-components-vscode-extension"
+                "--extensionDevelopmentPath=${workspaceFolder}/sample-web-component-vscode-extension"
             ],
             "name": "Launch Extension",
             "outFiles": [
-                "${workspaceFolder}/sample-web-components-vscode-extension/out/**/*.js"
+                "${workspaceFolder}/sample-web-component-vscode-extension/out/**/*.js"
             ],
             "request": "launch",
             "type": "pwa-extensionHost"
