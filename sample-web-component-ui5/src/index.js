@@ -1,18 +1,57 @@
-import { RpcBrowserWebSockets } from "@sap-devx/webview-rpc/out.browser/rpc-browser-ws";
 import "@ui5/webcomponents/dist/Button";
 import { setTheme } from "@ui5/webcomponents-base/dist/config/Theme.js";
+
+// To get buttons with square corners (like in vscode):
+initObserver();
+
+// Or to properly use ui5 theming, but to get buttons with rounded corners:
+// setVscodeTheme();
+// setTheme("vscode");
+
+function listenToLoadedNodes(nodes) {
+    for (const node of nodes) {
+        /**
+         * We apply the vscode theme after ui5 adds the last style to the DOM.
+         * TODO: Change: it is fragile
+         */
+        if (node.nodeName === "STYLE" && node.hasAttribute("data-ui5-system-css-vars")) {
+            node.addEventListener("load", () => {
+                setVscodeTheme();
+            });
+        }
+    }
+}
+
+function initObserver() {
+    const observer = new MutationObserver((mutationsList) => {
+        for (const mutation of mutationsList) {
+            if (mutation.addedNodes) {
+                listenToLoadedNodes(mutation.addedNodes);
+            }
+        }
+    });
+
+    observer.observe(window.document.head, { childList: true });
+}
 
 /**
  * Apply vscode-to-sap css variable mappings
  */
-const head = document.getElementsByTagName('head')[0];
-const cssnode = document.createElement('link');
-cssnode.class = "sapThemeMetaData-Base-baseLib";
-cssnode.type = 'text/css';
-cssnode.rel = 'stylesheet';
-cssnode.href = "vscode-theme.css";
-head.appendChild(cssnode);
-setTheme("vscode");
+function setVscodeTheme() {
+    const head = document.getElementsByTagName('head')[0];
+    let cssnode = document.createElement('link');
+    cssnode.class = "sapThemeMetaData-Base-baseLib";
+    cssnode.type = 'text/css';
+    cssnode.rel = 'stylesheet';
+    cssnode.href = "vscode-theme.css";
+    head.appendChild(cssnode);
+    /**
+     * setTheme() seems to not apply --_ui5 css variables,
+     * so we listen to last ui5-initiated DOM change,
+     * and then apply the vscode theme manually 
+     */
+    // setTheme("vscode");
+}
 
 /**
  * Create inquirer-gui custom element
@@ -100,4 +139,3 @@ inquirerGui.questions = getQuestions();
 const button = document.createElement("ui5-button");
 button.innerText = "Click me";
 document.body.appendChild(button);
-
