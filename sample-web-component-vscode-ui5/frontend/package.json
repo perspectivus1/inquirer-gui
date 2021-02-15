@@ -1,0 +1,41 @@
+{
+  "name": "sample-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "build-dev": "vue-cli-service build --mode development",
+    "lint": "vue-cli-service lint",
+    "test": "vue-cli-service test:unit",
+    "prep-local": "cd .. && npm run build-for-sample",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@mdi/font": "^4.9.95",
+    "@sap-devx/inquirer-gui": "0.1.21",
+    "@sap-devx/inquirer-gui-date-plugin": "0.0.2",
+    "@sap-devx/inquirer-gui-file-browser-plugin": "0.0.5",
+    "@sap-devx/inquirer-gui-login-plugin": "0.0.4",
+    "@sap-devx/inquirer-gui-tiles-plugin": "0.0.8",
+    "@sap-devx/webview-rpc": "^0.2.0",
+    "@ui5/webcomponents": "^1.0.0-rc.11",
+    "material-design-icons-iconfont": "^5.0.1",
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.11.0",
+    "@vue/cli-plugin-eslint": "^3.11.0",
+    "@vue/cli-plugin-unit-jest": "^4.1.1",
+    "@vue/cli-service": "^3.11.0",
+    "@vue/test-utils": "^1.0.0-beta.29",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "vue-template-compiler": "^2.6.10",
+    "webpack": "^4.41.2"
+  },
+  "author": "",
+  "license": "ISC"
+}
